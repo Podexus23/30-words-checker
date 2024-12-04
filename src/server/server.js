@@ -12,7 +12,7 @@ const PORT = 3000;
 const server = http.createServer(async (req, res) => {
   // GET METHOD
   if (req.method === "GET" && req.url) {
-    const parsedUrl = parse(req.url);
+    const parsedUrl = parse(req.url, true);
     const ext = extname(parsedUrl.pathname);
 
     if (ext) {
@@ -20,8 +20,10 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    if (parsedUrl.pathname === "/" && parsedUrl.query.word) {
-      respondJSON(res, 200, `${parsedUrl.query.word}`);
+    if (parsedUrl.pathname === "/" && parsedUrl.query?.en_word) {
+      // await respondFrontFiles(res, "index.html");
+      await respondFrontFiles(res, "index.html");
+      // respondJSON(res, 200, `${parsedUrl.query?.word}`);
       return;
     }
 
@@ -42,7 +44,6 @@ const server = http.createServer(async (req, res) => {
       return;
     }
     respondJSON(res, 404, "Hello, there is no such page, so ... 404");
-    return;
   }
 });
 

@@ -7,6 +7,8 @@
   "scripts": {
     "start": "node src/server/server.js",
     "dev": "nodemon src/server/server.js",
+    "browser-sync": "browser-sync start --config bs-config.json",
+    "dev:bs": "concurrently \"npm run dev\" \"npm run browser-sync\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -20,6 +22,8 @@
   },
   "homepage": "https://github.com/Podexus23/30-words-checker#readme",
   "devDependencies": {
+    "browser-sync": "^3.0.3",
+    "concurrently": "^9.1.0",
     "nodemon": "^3.1.7"
   }
 }

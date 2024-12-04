@@ -22,7 +22,13 @@ export const respondFrontFiles = async (res, filename) => {
     ".ico": "image/x-icon",
   };
 
-  const data = await readFile(pathToFile);
-  res.writeHead(200, { "Content-type": ContentTypes[ext] });
-  res.end(data);
+  try {
+    const data = await readFile(pathToFile);
+    res.writeHead(200, { "Content-type": ContentTypes[ext] });
+    res.end(data);
+  } catch (error) {
+    console.error(error.message);
+    res.writeHead(404, { "Content-type": "text/plain" });
+    res.end("404. File not found.");
+  }
 };

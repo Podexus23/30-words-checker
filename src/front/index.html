@@ -9,15 +9,32 @@
   </head>
   <body>
     <h1 class="header">Privet Bratishka</h1>
-    <div class="form">
-      <form action="/" method="get" autocomplete="off">
-        <input type="text" name="word" id="word" />
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+
+    <form action="/" method="get" autocomplete="off" class="add-word-form">
+      <fieldset class="add-word-form_field">
+        <legend>Add english word and it's translation</legend>
+        <input
+          type="text"
+          name="en_word"
+          id="en_word"
+          placeholder="English word"
+          required
+        />
+        <input
+          type="text"
+          name="ru_word"
+          id="ru_word"
+          placeholder="Translation"
+          required
+        />
+        <button class="btn" type="submit">Submit</button>
+      </fieldset>
+    </form>
+
     <div class="words">
       <button class="words_get-btn">Get Words</button>
       <div class="words_all"></div>
+      <img class="img" src="assets/jpg/cheecky-ass.jpg" alt="ass" />
     </div>
   </body>
 </html>

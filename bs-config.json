@@ -1,0 +1,8 @@
+{
+  "proxy": "localhost:3000",
+  "files": ["src/front/*.html", "src/front/*.css", "src/front/*.js"],
+  "port": 3001,
+  "reloadDelay": 100,
+  "open": false,
+  "notify": false
+}

@@ -1,4 +1,8 @@
-import { someTestFunc } from "./sub_main.js";
+import { handleAddWordForm } from "./js/add-word-form.handler.js";
+
+//ADD WORD FORM
+const addWordForm = document.querySelector(".add-word-form");
+addWordForm.addEventListener("submit", handleAddWordForm);
 
 const headerBlock = document.querySelector(".header");
 const newDiv = document.createElement("div");
@@ -17,5 +21,3 @@ buttonWords.addEventListener("click", async (e) => {
     allWordsBlock.append(wordBlock);
   });
 });
-
-someTestFunc();
