@@ -1,0 +1,25 @@
+{
+  "name": "30-words-checker",
+  "version": "1.0.0",
+  "description": "app for easier remembering words",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/server/server.js",
+    "dev": "nodemon src/server/server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Podexus23/30-words-checker.git"
+  },
+  "author": "Podexus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Podexus23/30-words-checker/issues"
+  },
+  "homepage": "https://github.com/Podexus23/30-words-checker#readme",
+  "devDependencies": {
+    "nodemon": "^3.1.7"
+  }
+}
