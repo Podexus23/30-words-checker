@@ -1,33 +1,52 @@
 import http from "http";
+import { respondJSON } from "./helpers.js";
+import { readFile } from "fs/promises";
+import { dirname, join } from "path";
+import { log } from "console";
 
 const PORT = 3000;
 
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
+  const pathToFront = join(dirname(import.meta.dirname), "front");
+
   switch (req.url) {
     case "/":
       {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify("Thats i suppose should be a main page"));
+        const pagePath = join(pathToFront, "index.html");
+        const page = await readFile(pagePath, "utf-8");
+        res.writeHead(200, { "Content-type": "text/html" });
+        res.end(page);
       }
       break;
-    case "/host":
+    case "/main.js":
       {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify("You are on host page"));
+        const pagePath = join(pathToFront, "main.js");
+        const page = await readFile(pagePath, "utf-8");
+        //send page with index.html
+        res.writeHead(200, { "Content-type": "text/javascript" });
+        res.end(page);
+        // respondJSON(res, 200, "Thats i suppose should be a main page");
       }
       break;
-    case "/admin":
+    case "/style.css":
       {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify("You are on admin page"));
+        const pagePath = join(pathToFront, "style.css");
+        const page = await readFile(pagePath, "utf-8");
+        res.writeHead(200, { "Content-type": "text/css" });
+        res.end(page);
       }
       break;
 
+    case "/host":
+      respondJSON(res, 200, "You are on host page");
+      break;
+
+    case "/admin":
+      respondJSON(res, 200, "You are on admin page");
+      break;
+
     default:
-      {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(JSON.stringify("Hello, there is no such page, so ... 404"));
-      }
+      respondJSON(res, 404, "Hello, there is no such page, so ... 404");
       break;
   }
 });
