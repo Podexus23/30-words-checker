@@ -1,53 +1,48 @@
 import http from "http";
-import { respondJSON } from "./helpers.js";
-import { readFile } from "fs/promises";
-import { dirname, join } from "path";
-import { log } from "console";
+import { respondFrontFiles, respondJSON } from "./helpers.js";
+import { parse } from "url";
+import { extname } from "path";
+
+const { default: db } = await import("../db/words.json", {
+  with: { type: "json" },
+});
 
 const PORT = 3000;
 
 const server = http.createServer(async (req, res) => {
-  const pathToFront = join(dirname(import.meta.dirname), "front");
+  // GET METHOD
+  if (req.method === "GET" && req.url) {
+    const parsedUrl = parse(req.url);
+    const ext = extname(parsedUrl.pathname);
 
-  switch (req.url) {
-    case "/":
-      {
-        const pagePath = join(pathToFront, "index.html");
-        const page = await readFile(pagePath, "utf-8");
-        res.writeHead(200, { "Content-type": "text/html" });
-        res.end(page);
-      }
-      break;
-    case "/main.js":
-      {
-        const pagePath = join(pathToFront, "main.js");
-        const page = await readFile(pagePath, "utf-8");
-        //send page with index.html
-        res.writeHead(200, { "Content-type": "text/javascript" });
-        res.end(page);
-        // respondJSON(res, 200, "Thats i suppose should be a main page");
-      }
-      break;
-    case "/style.css":
-      {
-        const pagePath = join(pathToFront, "style.css");
-        const page = await readFile(pagePath, "utf-8");
-        res.writeHead(200, { "Content-type": "text/css" });
-        res.end(page);
-      }
-      break;
+    if (ext) {
+      respondFrontFiles(res, parsedUrl.pathname.slice(1));
+      return;
+    }
 
-    case "/host":
+    if (parsedUrl.pathname === "/" && parsedUrl.query.word) {
+      respondJSON(res, 200, `${parsedUrl.query.word}`);
+      return;
+    }
+
+    if (req.url === "/") {
+      await respondFrontFiles(res, "index.html");
+      return;
+    }
+    if (req.url === "/data") {
+      respondJSON(res, 200, db);
+      return;
+    }
+    if (req.url === "/host") {
       respondJSON(res, 200, "You are on host page");
-      break;
-
-    case "/admin":
+      return;
+    }
+    if (req.url === "/admin") {
       respondJSON(res, 200, "You are on admin page");
-      break;
-
-    default:
-      respondJSON(res, 404, "Hello, there is no such page, so ... 404");
-      break;
+      return;
+    }
+    respondJSON(res, 404, "Hello, there is no such page, so ... 404");
+    return;
   }
 });
 
