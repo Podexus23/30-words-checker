@@ -45,6 +45,19 @@ const server = http.createServer(async (req, res) => {
     }
     respondJSON(res, 404, "Hello, there is no such page, so ... 404");
   }
+
+  if (req.method === "POST" && req.url) {
+    if (req.url === "/") {
+      let body = "";
+
+      req.on("data", (chunk) => (body += chunk.toString()));
+
+      req.on("end", () => {
+        const data = JSON.parse(body);
+        console.log(data);
+      });
+    }
+  }
 });
 
 server.listen(PORT, () => console.log(`Server listen on ${PORT}`));

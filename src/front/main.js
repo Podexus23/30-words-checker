@@ -1,7 +1,20 @@
-import { handleAddWordForm } from "./js/add-word-form.handler.js";
+// import { handleAddWordForm } from "./js/add-word-form.handler.js";
+
+const handleAddWordForm = async (e) => {
+  e.preventDefault();
+  const data = new FormData(e.target);
+  const dataToSend = JSON.stringify(
+    Object.fromEntries(Array.from(data.entries()))
+  );
+  console.dir(e.target);
+
+  await fetch("/", { method: "POST", body: dataToSend });
+
+  console.log(dataToSend);
+};
 
 //ADD WORD FORM
-const addWordForm = document.querySelector(".add-word-form");
+const addWordForm = document.forms["addWord"];
 addWordForm.addEventListener("submit", handleAddWordForm);
 
 const headerBlock = document.querySelector(".header");

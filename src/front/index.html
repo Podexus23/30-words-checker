@@ -10,7 +10,13 @@
   <body>
     <h1 class="header">Privet Bratishka</h1>
 
-    <form action="/" method="get" autocomplete="off" class="add-word-form">
+    <form
+      action="/"
+      method="get"
+      autocomplete="off"
+      name="addWord"
+      class="add-word-form"
+    >
       <fieldset class="add-word-form_field">
         <legend>Add english word and it's translation</legend>
         <input
@@ -18,14 +24,12 @@
           name="en_word"
           id="en_word"
           placeholder="English word"
-          required
         />
         <input
           type="text"
           name="ru_word"
           id="ru_word"
           placeholder="Translation"
-          required
         />
         <button class="btn" type="submit">Submit</button>
       </fieldset>
