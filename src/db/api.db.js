@@ -29,4 +29,19 @@ export const addWord = (wordData) => {
   updateJson();
 };
 
+export const removeWord = (word) => {
+  if (!searchWord(word)) return;
+  delete inMemoryDB[word];
+  updateJson();
+};
+
+//! work in progress
+// нужно присылать раздельное имя и обозначения
+// {name: cop, en_word: cup, ru_word: чашка}
+export const updateWord = (wordData) => {
+  if (!searchWord(wordData.name)) return;
+  inMemoryDB[wordData.name] = { en: wordData.en_word, ru: wordData.ru_word };
+  updateJson();
+};
+
 //"cat": { "en": "cat", "ru": "кот" },
