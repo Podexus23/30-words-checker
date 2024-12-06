@@ -2,6 +2,7 @@ import http from "http";
 import { respondFrontFiles, respondJSON } from "./helpers.js";
 import { parse } from "url";
 import { extname } from "path";
+import { addWord, getWords } from "../db/api.db.js";
 
 const { default: db } = await import("../db/words.json", {
   with: { type: "json" },
@@ -32,7 +33,7 @@ const server = http.createServer(async (req, res) => {
       return;
     }
     if (req.url === "/data") {
-      respondJSON(res, 200, db);
+      respondJSON(res, 200, getWords());
       return;
     }
     if (req.url === "/host") {
@@ -46,15 +47,17 @@ const server = http.createServer(async (req, res) => {
     respondJSON(res, 404, "Hello, there is no such page, so ... 404");
   }
 
+  //API
   if (req.method === "POST" && req.url) {
-    if (req.url === "/") {
+    if (req.url === "/api/word") {
       let body = "";
 
       req.on("data", (chunk) => (body += chunk.toString()));
 
       req.on("end", () => {
-        const data = JSON.parse(body);
-        console.log(data);
+        const { en_word, ru_word } = JSON.parse(body);
+        const dataToDB = { name: en_word, en_word, ru_word };
+        addWord(dataToDB);
       });
     }
   }

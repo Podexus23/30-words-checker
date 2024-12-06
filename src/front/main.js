@@ -1,17 +1,4 @@
-// import { handleAddWordForm } from "./js/add-word-form.handler.js";
-
-const handleAddWordForm = async (e) => {
-  e.preventDefault();
-  const data = new FormData(e.target);
-  const dataToSend = JSON.stringify(
-    Object.fromEntries(Array.from(data.entries()))
-  );
-  console.dir(e.target);
-
-  await fetch("/", { method: "POST", body: dataToSend });
-
-  console.log(dataToSend);
-};
+import { handleAddWordForm } from "./js/add-word-form.handler.js";
 
 //ADD WORD FORM
 const addWordForm = document.forms["addWord"];
@@ -30,7 +17,7 @@ buttonWords.addEventListener("click", async (e) => {
 
   Object.keys(data).forEach((word) => {
     const wordBlock = document.createElement("div");
-    wordBlock.textContent = `${data[word].en}- ${data[word].ru}`;
+    wordBlock.textContent = `${data[word].en} - ${data[word].ru}`;
     allWordsBlock.append(wordBlock);
   });
 });
