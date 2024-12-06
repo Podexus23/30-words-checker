@@ -22,9 +22,7 @@ const server = http.createServer(async (req, res) => {
     }
 
     if (parsedUrl.pathname === "/" && parsedUrl.query?.en_word) {
-      // await respondFrontFiles(res, "index.html");
       await respondFrontFiles(res, "index.html");
-      // respondJSON(res, 200, `${parsedUrl.query?.word}`);
       return;
     }
 
@@ -32,6 +30,12 @@ const server = http.createServer(async (req, res) => {
       await respondFrontFiles(res, "index.html");
       return;
     }
+
+    if (req.url === "/game") {
+      await respondFrontFiles(res, "pages/game.html");
+      return;
+    }
+
     if (req.url === "/data") {
       respondJSON(res, 200, getWords());
       return;

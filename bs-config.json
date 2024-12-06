@@ -4,6 +4,7 @@
     "src/front/*.html",
     "src/front/*.css",
     "src/front/*.js",
+    "src/front/**/*.html",
     "src/front/**/*.js"
   ],
   "port": 3001,

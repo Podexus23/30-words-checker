@@ -1,7 +1,1 @@
-{
-  "cat": { "en": "cat", "ru": "кот" },
-  "dog": { "en": "dog", "ru": "собака" },
-  "ship": { "en": "ship", "ru": "корабль" },
-  "sheep": { "en": "sheep", "ru": "овца" },
-  "cup": { "en": "cup", "ru": "чашка" }
-}
+{"cat":{"en":"cat","ru":"кот"},"dog":{"en":"dog","ru":"собака"},"ship":{"en":"ship","ru":"корабль"},"sheep":{"en":"sheep","ru":"овца"},"cup":{"en":"cup","ru":"чашка"},"people":{"en":"people","ru":"люди"},"family":{"en":"family","ru":"семья"},"woman":{"en":"woman","ru":"женщина"},"man":{"en":"man","ru":"мужчина"},"girl":{"en":"girl","ru":"девочка"},"boy":{"en":"boy","ru":"мальчик"},"child":{"en":"child","ru":"ребенок"},"friend":{"en":"friend","ru":"друг"},"name":{"en":"name","ru":"имя"},"head":{"en":"head","ru":"голова"},"face":{"en":"face","ru":"лицо"}}
