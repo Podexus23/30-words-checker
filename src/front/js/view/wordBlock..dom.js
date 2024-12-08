@@ -1,6 +1,4 @@
-import { gameState } from "../../main.js";
-
-export function createWordBlock(wordData, updater) {
+export function createWordBlock(wordData) {
   const wordCheckBlock = document.createElement("div");
   wordCheckBlock.className = `game_block`;
 
@@ -13,6 +11,7 @@ export function createWordBlock(wordData, updater) {
   ruWordInput.className = "game_block-answer";
 
   const answerButton = document.createElement("button");
+  answerButton.className = "game_block-btn";
   answerButton.textContent = "Ok";
 
   function handleCheckButton(e) {
@@ -20,14 +19,13 @@ export function createWordBlock(wordData, updater) {
     const value = inputToCheck.value;
     if (value === wordData.ru) {
       wordCheckBlock.style.background = `rgb(10,150,50)`;
-      gameState.rightAnswers += 1;
+      wordCheckBlock.dataset.answer = "true";
     } else {
+      wordCheckBlock.dataset.answer = "false";
       wordCheckBlock.style.background = `rgb(100,1,1)`;
     }
     inputToCheck.disabled = true;
     e.target.disabled = true;
-    gameState.playerMoves++;
-    updater(gameState.rightAnswers, gameState.wordsQuantity);
 
     answerButton.removeEventListener("click", handleCheckButton);
   }

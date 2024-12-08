@@ -66,8 +66,14 @@ export const gameState = {
 if (isGamePage) {
   const startGameBtn = document.querySelector(".game-start-btn");
   const gameBlock = document.querySelector(".game");
+  let gameWrapper;
 
   async function startGame() {
+    gameWrapper = document.createElement("div");
+    gameWrapper.className = "game-wrapper";
+
+    gameBlock.append(gameWrapper);
+
     let data = Object.values(
       await (await fetch("/data", { method: "get" })).json()
     );
@@ -75,14 +81,42 @@ if (isGamePage) {
     const words = generateRandomWords(data, gameState.wordsQuantity);
 
     words.forEach((word) => {
-      gameBlock.append(createWordBlock(word, updateCounterBlock));
+      gameWrapper.append(createWordBlock(word));
     });
-    gameBlock.append(createCounterBlock(gameState.wordsQuantity));
+    gameWrapper.append(createCounterBlock(gameState.wordsQuantity));
   }
 
-  async function handleStartGameBtn(event) {
-    startGame();
-  }
+  gameBlock.addEventListener("click", async (e) => {
+    if (e.target.classList.contains("game-start-btn")) {
+      await startGame();
+      startGameBtn.disabled = true;
+    }
+    if (e.target.classList.contains("game_block-btn")) {
+      const wordBlock = e.target.parentNode;
+      if (wordBlock.dataset.answer === "true") gameState.rightAnswers += 1;
+      gameState.playerMoves += 1;
+      updateCounterBlock(gameState.rightAnswers, gameState.wordsQuantity);
+    }
+    if (gameState.wordsQuantity <= gameState.playerMoves) {
+      const finalBlock = document.createElement("div");
+      finalBlock.textContent = `Your result is ${gameState.rightAnswers} out of ${gameState.wordsQuantity} words.`;
+      const endButton = document.createElement("button");
+      endButton.className = "game-btn_end";
+      endButton.textContent = "restart";
 
-  startGameBtn.addEventListener("click", handleStartGameBtn);
+      gameWrapper.append(finalBlock);
+
+      function restartGame() {
+        gameState.playerMoves = 0;
+        gameState.rightAnswers = 0;
+        gameWrapper.remove();
+        startGame();
+        endButton.removeEventListener("click", restartGame);
+      }
+
+      endButton.addEventListener("click", restartGame);
+
+      gameWrapper.append(endButton);
+    }
+  });
 }
