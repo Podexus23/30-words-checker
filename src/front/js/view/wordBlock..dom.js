@@ -39,7 +39,7 @@ export function createWordBlock(wordData) {
   return wordCheckBlock;
 }
 
-export function createCounterBlock(countTo) {
+export function createStateBlock(countTo) {
   const wrapper = document.createElement("div");
   wrapper.className = "game_state";
 
@@ -47,7 +47,7 @@ export function createCounterBlock(countTo) {
   return wrapper;
 }
 
-export function updateCounterBlock(number, countTo) {
+export function updateStateBlock(number, countTo) {
   const counterBlock = document.querySelector(".game_state");
   counterBlock.textContent = `${number} / ${countTo}`;
 }

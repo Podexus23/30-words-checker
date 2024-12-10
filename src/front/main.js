@@ -1,134 +1,13 @@
-import { handleSubmitAddWordForm } from "./js/add-word-form.handler.js";
+import { getRandomWordsFromServer } from "./js/model/game.model.js";
 import {
-  createForm,
-  createImage,
-  createInput,
-  createLink,
-  createTag,
-} from "./js/view/elements.dom.js";
-import {
-  createCounterBlock,
-  createWordBlock,
-  updateCounterBlock,
-} from "./js/view/wordBlock..dom.js";
-
-function renderMainPage() {
-  const isMainPage = document.querySelector(".main-page");
-
-  // const addWordForm = document.forms["addWord"];
-
-  //HEADER
-  const header = createTag({ tagName: "header", className: "header" });
-  const heading = createTag({
-    tagName: "h1",
-    className: "header_heading",
-    textContent: "Privet Bratishka",
-  });
-  const gamePageLink = createLink({
-    className: "header_game-link",
-    href: "/game",
-    textContent: "Let's start a game",
-  });
-  const subHeading = createTag({
-    tagName: "div",
-    className: "header_sub-heading",
-    textContent: "hello neighbor",
-  });
-  header.append(heading);
-  header.append(subHeading);
-  header.append(gamePageLink);
-
-  isMainPage.append(header);
-
-  //MAIN
-
-  const main = createTag({ tagName: "main", className: "main" });
-  isMainPage.append(main);
-
-  const addWordForm = createForm({
-    action: "/api/word",
-    method: "post",
-    name: "addWord",
-    className: "add-word-form",
-  });
-  addWordForm.addEventListener("submit", handleSubmitAddWordForm);
-  main.append(addWordForm);
-
-  const fieldAddWord = createTag({
-    tagName: "fieldset",
-    className: "add-word-form_field",
-  });
-  addWordForm.append(fieldAddWord);
-
-  const fieldLegend = createTag({
-    tagName: "legend",
-    className: "add-word-form_legend",
-    textContent: "Add english word and it's translation",
-  });
-  fieldAddWord.append(fieldLegend);
-
-  const enWordInput = createInput({
-    type: "text",
-    id: "en_word",
-    name: "en_word",
-    placeholder: "English word",
-  });
-  fieldAddWord.append(enWordInput);
-
-  const ruWordInput = createInput({
-    type: "text",
-    id: "ru_word",
-    name: "ru_word",
-    placeholder: "Translation",
-  });
-  fieldAddWord.append(ruWordInput);
-
-  const submitBtn = createTag({
-    tagName: "button",
-    className: "submit-btn btn",
-    textContent: "Submit",
-  });
-  submitBtn.type = "submit";
-  fieldAddWord.append(submitBtn);
-  //FOOTER
-
-  const footer = createTag({ tagName: "footer", className: "footer" });
-  isMainPage.append(footer);
-
-  const wordsBlock = createTag({
-    tagName: "div",
-    className: "footer_words-block",
-  });
-  footer.append(wordsBlock);
-
-  const showWordsBtn = createTag({
-    tagName: "button",
-    className: "words_get-btn",
-    textContent: "Get Words",
-  });
-  wordsBlock.append(showWordsBtn);
-  showWordsBtn.addEventListener("click", async (e) => {
-    const getData = await fetch("/data");
-    const data = await getData.json();
-
-    Object.keys(data).forEach((word) => {
-      const wordBlock = document.createElement("div");
-      wordBlock.textContent = `${data[word].en} - ${data[word].ru}`;
-      allWordsBlock.append(wordBlock);
-    });
-  });
-
-  const allWordsBlock = createTag({ tagName: "div", className: "words_all" });
-  wordsBlock.append(allWordsBlock);
-
-  const footerPic = createImage({
-    className: "footer-img img",
-    src: "assets/jpg/cheecky-ass.jpg",
-    alt: "ass",
-  });
-  console.log(footerPic);
-  footer.append(footerPic);
-}
+  removeGameWrapperBlock,
+  renderGamePage,
+  renderWrapperBlock,
+  updateFinalWrapperBlock,
+  updateForGameWrapperBlock,
+} from "./js/view/renderGame.view.js";
+import { renderMainPage } from "./js/view/renderMain.view.js";
+import { updateStateBlock } from "./js/view/wordBlock..dom.js";
 
 //ADD WORD FORM
 const isMainPage = document.querySelector(".main-page");
@@ -137,28 +16,10 @@ if (isMainPage) {
 }
 
 // GAME
-
-function getRandom(min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-}
-
-function generateRandomWords(wordsArr, quantity = 5) {
-  if (quantity > wordsArr.length) {
-    console.error(
-      `generateRandomWords: to much to words add, try less than ${wordsArr.length}`
-    );
-    return;
-  }
-
-  const chosenWords = [];
-  for (let i = 0; i < quantity; i++) {
-    let newWord = wordsArr[getRandom(0, wordsArr.length - 1)];
-
-    let chosenMap = chosenWords.map((e) => e.en);
-    if (!chosenMap.includes(newWord.en)) chosenWords.push(newWord);
-    else i--;
-  }
-  return chosenWords;
+async function startGame(state, parent) {
+  renderWrapperBlock(parent);
+  const words = await getRandomWordsFromServer(state.wordsQuantity);
+  updateForGameWrapperBlock(words);
 }
 
 const isGamePage = document.querySelector(".game-page");
@@ -169,60 +30,34 @@ if (isGamePage) {
     playerMoves: 0,
     rightAnswers: 0,
   };
-
-  const startGameBtn = document.querySelector(".game-start-btn");
-  const gameBlock = document.querySelector(".game");
+  renderGamePage();
   let gameWrapper;
 
-  async function startGame() {
-    gameWrapper = document.createElement("div");
-    gameWrapper.className = "game-wrapper";
-
-    gameBlock.append(gameWrapper);
-
-    let data = Object.values(
-      await (await fetch("/data", { method: "get" })).json()
-    );
-
-    const words = generateRandomWords(data, gameState.wordsQuantity);
-
-    words.forEach((word) => {
-      gameWrapper.append(createWordBlock(word));
-    });
-    gameWrapper.append(createCounterBlock(gameState.wordsQuantity));
-  }
-
-  gameBlock.addEventListener("click", async (e) => {
+  isGamePage.addEventListener("click", async (e) => {
     if (e.target.classList.contains("game-start-btn")) {
-      await startGame();
+      const startGameBtn = document.querySelector(".game-start-btn");
+      await startGame(gameState, isGamePage);
       startGameBtn.disabled = true;
     }
     if (e.target.classList.contains("game_block-btn")) {
       const wordBlock = e.target.parentNode;
       if (wordBlock.dataset.answer === "true") gameState.rightAnswers += 1;
       gameState.playerMoves += 1;
-      updateCounterBlock(gameState.rightAnswers, gameState.wordsQuantity);
+      updateStateBlock(gameState.rightAnswers, gameState.wordsQuantity);
     }
     if (gameState.wordsQuantity <= gameState.playerMoves) {
-      const finalBlock = document.createElement("div");
-      finalBlock.textContent = `Your result is ${gameState.rightAnswers} out of ${gameState.wordsQuantity} words.`;
-      const endButton = document.createElement("button");
-      endButton.className = "game-btn_end";
-      endButton.textContent = "restart";
-
-      gameWrapper.append(finalBlock);
+      //!remove end button
+      const endButton = updateFinalWrapperBlock(gameState);
 
       function restartGame() {
         gameState.playerMoves = 0;
         gameState.rightAnswers = 0;
-        gameWrapper.remove();
-        startGame();
+        removeGameWrapperBlock();
+        startGame(gameState, isGamePage);
         endButton.removeEventListener("click", restartGame);
       }
 
       endButton.addEventListener("click", restartGame);
-
-      gameWrapper.append(endButton);
     }
   });
 }
