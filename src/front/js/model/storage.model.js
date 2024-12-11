@@ -1,6 +1,6 @@
 const localDB = await JSON.parse(window.localStorage.getItem("WC_words"));
 
-const searchWordLocal = (word) => {
+export const searchWordLocal = (word) => {
   if (localDB[word]) return localDB[word];
   else return null;
 };

@@ -1,5 +1,8 @@
 import { globalState } from "../../main.js";
-import { handleSubmitAddWordForm } from "../add-word-form.handler.js";
+import {
+  handleGetWordsButton,
+  handleSubmitAddWordForm,
+} from "../controller/mainPage.controller.js";
 import {
   createForm,
   createImage,
@@ -11,8 +14,6 @@ import { renderDataState } from "./renderDataState.view.js";
 
 export function renderMainPage(state) {
   const isMainPage = document.querySelector(".main-page");
-
-  // const addWordForm = document.forms["addWord"];
 
   //HEADER
   const header = createTag({ tagName: "header", className: "header" });
@@ -31,17 +32,15 @@ export function renderMainPage(state) {
     className: "header_sub-heading",
     textContent: "hello neighbor",
   });
+
+  isMainPage.append(header);
   header.append(heading);
   header.append(subHeading);
   header.append(gamePageLink);
 
-  isMainPage.append(header);
-
   //MAIN
 
   const main = createTag({ tagName: "main", className: "main" });
-  isMainPage.append(main);
-
   const addWordForm = createForm({
     action: "/api/word",
     method: "post",
@@ -49,20 +48,17 @@ export function renderMainPage(state) {
     className: "add-word-form",
   });
   addWordForm.addEventListener("submit", handleSubmitAddWordForm);
-  main.append(addWordForm);
 
   const fieldAddWord = createTag({
     tagName: "fieldset",
     className: "add-word-form_field",
   });
-  addWordForm.append(fieldAddWord);
 
   const fieldLegend = createTag({
     tagName: "legend",
     className: "add-word-form_legend",
     textContent: "Add english word and it's translation",
   });
-  fieldAddWord.append(fieldLegend);
 
   const enWordInput = createInput({
     type: "text",
@@ -70,7 +66,6 @@ export function renderMainPage(state) {
     name: "en_word",
     placeholder: "English word",
   });
-  fieldAddWord.append(enWordInput);
 
   const ruWordInput = createInput({
     type: "text",
@@ -78,7 +73,6 @@ export function renderMainPage(state) {
     name: "ru_word",
     placeholder: "Translation",
   });
-  fieldAddWord.append(ruWordInput);
 
   const submitBtn = createTag({
     tagName: "button",
@@ -86,46 +80,41 @@ export function renderMainPage(state) {
     textContent: "Submit",
   });
   submitBtn.type = "submit";
+
+  isMainPage.append(main);
+  main.append(addWordForm);
+  addWordForm.append(fieldAddWord);
+  fieldAddWord.append(fieldLegend);
+  fieldAddWord.append(enWordInput);
+  fieldAddWord.append(ruWordInput);
   fieldAddWord.append(submitBtn);
   //FOOTER
 
   const footer = createTag({ tagName: "footer", className: "footer" });
-  isMainPage.append(footer);
 
   const wordsBlock = createTag({
     tagName: "div",
     className: "footer_words-block",
   });
-  footer.append(wordsBlock);
 
   const showWordsBtn = createTag({
     tagName: "button",
     className: "words_get-btn",
     textContent: "Get Words",
   });
-  wordsBlock.append(showWordsBtn);
-  showWordsBtn.addEventListener("click", async (e) => {
-    // const getData = await fetch("/data");
-    // const data = await getData.json();
-    let data;
-    if (globalState.source === "server")
-      data = await renderDataState.server.getAllWords();
-    if (globalState.source === "storage")
-      data = await renderDataState.storage.getAllWords();
-    Object.keys(data).forEach((word) => {
-      const wordBlock = document.createElement("div");
-      wordBlock.textContent = `${data[word].en} - ${data[word].ru}`;
-      allWordsBlock.append(wordBlock);
-    });
-  });
+  showWordsBtn.addEventListener("click", handleGetWordsButton);
 
   const allWordsBlock = createTag({ tagName: "div", className: "words_all" });
-  wordsBlock.append(allWordsBlock);
 
   const footerPic = createImage({
     className: "footer-img img",
     src: "assets/jpg/cheecky-ass.jpg",
     alt: "ass",
   });
+
+  isMainPage.append(footer);
+  footer.append(wordsBlock);
+  wordsBlock.append(showWordsBtn);
+  wordsBlock.append(allWordsBlock);
   footer.append(footerPic);
 }

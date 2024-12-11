@@ -31,7 +31,13 @@ export function generateRandomWords(wordsArr, quantity = 5) {
 }
 
 export async function getDataFromServer() {
-  return await (await fetch("/data", { method: "get" })).json();
+  tempWords = await (await fetch("/data", { method: "get" })).json();
+  return tempWords;
+}
+
+export function searchServerWord(word) {
+  if (tempWords[word]) return tempWords[word];
+  else return null;
 }
 
 export async function getRandomWordsFromServer(quantity) {
@@ -52,7 +58,6 @@ export function getDataFromLocalStorage() {
     }
   }
 
-  console.log(tempWords);
   return tempWords;
 }
 

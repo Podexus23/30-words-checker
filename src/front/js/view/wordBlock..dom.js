@@ -1,3 +1,5 @@
+import { handleCheckButton } from "../controller/game.controller.js";
+
 export function createWordBlock(wordData) {
   const wordCheckBlock = document.createElement("div");
   wordCheckBlock.className = `game_block`;
@@ -13,22 +15,6 @@ export function createWordBlock(wordData) {
   const answerButton = document.createElement("button");
   answerButton.className = "game_block-btn";
   answerButton.textContent = "Ok";
-
-  function handleCheckButton(e) {
-    const inputToCheck = wordCheckBlock.querySelector(".game_block-answer");
-    const value = inputToCheck.value;
-    if (value === wordData.ru) {
-      wordCheckBlock.style.background = `rgb(10,150,50)`;
-      wordCheckBlock.dataset.answer = "true";
-    } else {
-      wordCheckBlock.dataset.answer = "false";
-      wordCheckBlock.style.background = `rgb(100,1,1)`;
-    }
-    inputToCheck.disabled = true;
-    e.target.disabled = true;
-
-    answerButton.removeEventListener("click", handleCheckButton);
-  }
 
   answerButton.addEventListener("click", handleCheckButton);
 
@@ -50,4 +36,12 @@ export function createStateBlock(countTo) {
 export function updateStateBlock(number, countTo) {
   const counterBlock = document.querySelector(".game_state");
   counterBlock.textContent = `${number} / ${countTo}`;
+}
+
+export function addWordToWordsBlock(word, data) {
+  const wordBlock = document.createElement("div");
+  wordBlock.textContent = `${data[word].en} - ${data[word].ru}`;
+
+  const allWordsBlock = document.querySelector(".words_all");
+  allWordsBlock.append(wordBlock);
 }

@@ -6,11 +6,8 @@ export function renderGamePage(state) {
   //ASIDE
   const gamePage = document.querySelector(".game-page");
   const aside = createTag({ tagName: "aside", className: "aside" });
-  gamePage.append(aside);
   const optionsBlock = createTag({ tagName: "div", className: "game-options" });
-  aside.append(optionsBlock);
   const srcOptionsBlock = createTag({ tagName: "div", className: "game-src" });
-  optionsBlock.append(srcOptionsBlock);
   const serverButton = createTag({
     tagName: "button",
     className: "game-src_btn btn",
@@ -23,33 +20,39 @@ export function renderGamePage(state) {
     textContent: "LocalStorage",
   });
   localButton.dataset.src = "storage";
+
+  gamePage.append(aside);
+  aside.append(optionsBlock);
+  optionsBlock.append(srcOptionsBlock);
   srcOptionsBlock.append(serverButton);
   srcOptionsBlock.append(localButton);
 
   //header
   const header = createTag({ tagName: "header", className: "header" });
-  gamePage.append(header);
   const heading = createTag({
     tagName: "h1",
     className: "heading-1",
     textContent: "It's just a game, boy!",
   });
-  header.append(heading);
   const mainLink = createLink({
     href: `${renderDataState[state.source].toMainPageLink}`,
     textContent: "Welcome back",
     className: "main-link link",
   });
+
+  gamePage.append(header);
+  header.append(heading);
   header.append(mainLink);
 
   //main
   const main = createTag({ tagName: "main", className: "game-main" });
-  gamePage.append(main);
   const startButton = createTag({
     tagName: "button",
     className: "game-start-btn btn",
     textContent: "Start Game",
   });
+
+  gamePage.append(main);
   main.append(startButton);
 }
 
@@ -59,7 +62,6 @@ export function renderWrapperBlock(parentNode) {
 }
 
 export function updateForGameWrapperBlock(wordsArr) {
-  console.log(wordsArr);
   const gameWrapper = document.querySelector(".game-wrapper");
   wordsArr.forEach((word) => {
     gameWrapper.append(createWordBlock(word));

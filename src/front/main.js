@@ -9,6 +9,8 @@ import { updateStateBlock } from "./js/view/wordBlock..dom.js";
 
 export const globalState = {
   source: "storage",
+  // source: "indexedDB",
+  // source: "server",
 };
 
 //ADD WORD FORM
@@ -37,7 +39,7 @@ if (isGamePage) {
       startGameBtn.disabled = true;
     }
     if (e.target.classList.contains("game_block-btn")) {
-      const wordBlock = e.target.parentNode;
+      const wordBlock = e.target.closest(".game_block");
       if (wordBlock.dataset.answer === "true") gameState.rightAnswers += 1;
       gameState.playerMoves += 1;
       updateStateBlock(gameState.rightAnswers, gameState.wordsQuantity);
