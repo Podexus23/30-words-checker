@@ -7,7 +7,7 @@ import {
 import { renderMainPage } from "./js/view/renderMain.view.js";
 import { updateStateBlock } from "./js/view/wordBlock..dom.js";
 
-const globalState = {
+export const globalState = {
   source: "storage",
 };
 

@@ -5,9 +5,9 @@ const { default: db } = await import("./words.json", {
   with: { type: "json" },
 });
 
-const inMemoryDB = db;
+export const inMemoryDB = db;
 
-const updateJson = async () => {
+export const updateJson = async () => {
   try {
     const jsonPath = path.join(import.meta.dirname, "words.json");
     await writeFile(jsonPath, JSON.stringify(db));

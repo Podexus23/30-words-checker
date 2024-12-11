@@ -1,5 +1,5 @@
 import { createLink, createTag } from "./elements.dom.js";
-import { renderData } from "./renderData.view.js";
+import { renderDataState } from "./renderDataState.view.js";
 import { createStateBlock, createWordBlock } from "./wordBlock..dom.js";
 
 export function renderGamePage(state) {
@@ -36,7 +36,7 @@ export function renderGamePage(state) {
   });
   header.append(heading);
   const mainLink = createLink({
-    href: `${renderData[state.source].toMainPageLink}`,
+    href: `${renderDataState[state.source].toMainPageLink}`,
     textContent: "Welcome back",
     className: "main-link link",
   });

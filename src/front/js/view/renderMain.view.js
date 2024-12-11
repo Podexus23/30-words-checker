@@ -1,3 +1,4 @@
+import { globalState } from "../../main.js";
 import { handleSubmitAddWordForm } from "../add-word-form.handler.js";
 import {
   createForm,
@@ -6,7 +7,7 @@ import {
   createLink,
   createTag,
 } from "./elements.dom.js";
-import { renderData } from "./renderData.view.js";
+import { renderDataState } from "./renderDataState.view.js";
 
 export function renderMainPage(state) {
   const isMainPage = document.querySelector(".main-page");
@@ -22,7 +23,7 @@ export function renderMainPage(state) {
   });
   const gamePageLink = createLink({
     className: "header_game-link",
-    href: `${renderData[state.source].toGamePageLink}`,
+    href: `${renderDataState[state.source].toGamePageLink}`,
     textContent: "Let's start a game",
   });
   const subHeading = createTag({
@@ -104,9 +105,13 @@ export function renderMainPage(state) {
   });
   wordsBlock.append(showWordsBtn);
   showWordsBtn.addEventListener("click", async (e) => {
-    const getData = await fetch("/data");
-    const data = await getData.json();
-
+    // const getData = await fetch("/data");
+    // const data = await getData.json();
+    let data;
+    if (globalState.source === "server")
+      data = await renderDataState.server.getAllWords();
+    if (globalState.source === "storage")
+      data = await renderDataState.storage.getAllWords();
     Object.keys(data).forEach((word) => {
       const wordBlock = document.createElement("div");
       wordBlock.textContent = `${data[word].en} - ${data[word].ru}`;
