@@ -1,7 +1,8 @@
 import { createLink, createTag } from "./elements.dom.js";
+import { renderData } from "./renderData.view.js";
 import { createStateBlock, createWordBlock } from "./wordBlock..dom.js";
 
-export function renderGamePage() {
+export function renderGamePage(state) {
   //ASIDE
   const gamePage = document.querySelector(".game-page");
   const aside = createTag({ tagName: "aside", className: "aside" });
@@ -21,7 +22,7 @@ export function renderGamePage() {
     className: "game-src_btn btn",
     textContent: "LocalStorage",
   });
-  serverButton.dataset.src = "storage";
+  localButton.dataset.src = "storage";
   srcOptionsBlock.append(serverButton);
   srcOptionsBlock.append(localButton);
 
@@ -35,7 +36,7 @@ export function renderGamePage() {
   });
   header.append(heading);
   const mainLink = createLink({
-    href: "/",
+    href: `${renderData[state.source].toMainPageLink}`,
     textContent: "Welcome back",
     className: "main-link link",
   });
@@ -60,7 +61,6 @@ export function renderWrapperBlock(parentNode) {
 export function updateForGameWrapperBlock(wordsArr) {
   console.log(wordsArr);
   const gameWrapper = document.querySelector(".game-wrapper");
-  console.log(gameWrapper);
   wordsArr.forEach((word) => {
     gameWrapper.append(createWordBlock(word));
   });

@@ -6,8 +6,9 @@ import {
   createLink,
   createTag,
 } from "./elements.dom.js";
+import { renderData } from "./renderData.view.js";
 
-export function renderMainPage() {
+export function renderMainPage(state) {
   const isMainPage = document.querySelector(".main-page");
 
   // const addWordForm = document.forms["addWord"];
@@ -21,7 +22,7 @@ export function renderMainPage() {
   });
   const gamePageLink = createLink({
     className: "header_game-link",
-    href: "/game",
+    href: `${renderData[state.source].toGamePageLink}`,
     textContent: "Let's start a game",
   });
   const subHeading = createTag({

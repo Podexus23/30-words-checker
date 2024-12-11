@@ -1,26 +1,23 @@
-import { getRandomWordsFromServer } from "./js/model/game.model.js";
+import { startGame } from "./js/controller/game.controller.js";
 import {
   removeGameWrapperBlock,
   renderGamePage,
-  renderWrapperBlock,
   updateFinalWrapperBlock,
-  updateForGameWrapperBlock,
 } from "./js/view/renderGame.view.js";
 import { renderMainPage } from "./js/view/renderMain.view.js";
 import { updateStateBlock } from "./js/view/wordBlock..dom.js";
 
+const globalState = {
+  source: "storage",
+};
+
 //ADD WORD FORM
 const isMainPage = document.querySelector(".main-page");
 if (isMainPage) {
-  renderMainPage();
+  renderMainPage(globalState);
 }
 
 // GAME
-async function startGame(state, parent) {
-  renderWrapperBlock(parent);
-  const words = await getRandomWordsFromServer(state.wordsQuantity);
-  updateForGameWrapperBlock(words);
-}
 
 const isGamePage = document.querySelector(".game-page");
 
@@ -29,9 +26,9 @@ if (isGamePage) {
     wordsQuantity: 5,
     playerMoves: 0,
     rightAnswers: 0,
+    source: globalState.source,
   };
-  renderGamePage();
-  let gameWrapper;
+  renderGamePage(globalState);
 
   isGamePage.addEventListener("click", async (e) => {
     if (e.target.classList.contains("game-start-btn")) {
@@ -59,5 +56,28 @@ if (isGamePage) {
 
       endButton.addEventListener("click", restartGame);
     }
+  });
+
+  const gameOptBlock = document.querySelector(".game-src");
+
+  gameOptBlock.addEventListener("click", (e) => {
+    if (e.target.classList.contains("game-src_btn")) {
+      const btn = e.target;
+
+      if (btn.dataset.src === "server") {
+        gameState.source = "server";
+        //if server, send request to server if it answers, ok
+        //else tell to chose localStorage or add words by your self
+        console.log("hi server");
+      }
+
+      if (btn.dataset.src === "storage") {
+        gameState.source = "storage";
+      }
+    }
+  });
+
+  window.addEventListener("beforeunload", () => {
+    window.localStorage.setItem("WC_words", JSON.stringify(tempWords));
   });
 }
