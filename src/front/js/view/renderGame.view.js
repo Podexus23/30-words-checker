@@ -103,7 +103,4 @@ export function updateFinalWrapperBlock({ rightAnswers, wordsQuantity }) {
 
   gameWrapper.append(finalBlock);
   gameWrapper.append(endButton);
-
-  //!убрать нужен для кривого подвешивания listener
-  return endButton;
 }

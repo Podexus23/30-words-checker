@@ -28,9 +28,11 @@ function initGameState(state) {
   gameState.source = state.source;
 }
 
-export async function startGame(state) {
+async function startGame(state) {
   const gamePage = document.querySelector(".game-page");
+
   initGameState(globalState);
+  //create block wor game words
   renderWrapperBlock(gamePage);
 
   let words;
@@ -41,66 +43,91 @@ export async function startGame(state) {
     words = await getRandomWordsFromLocalStorage(state.wordsQuantity);
   }
 
+  //add all words inputs
   updateGameWrapperBlock(words);
 }
 
-export function handleCheckButton(e) {
+function restartGame() {
+  this.removeEventListener("click", restartGame);
+  removeGameWrapperBlock();
+  startGame(gameState);
+}
+
+function handleAnswerButtonClick(e) {
   const wordCheckBlock = e.target.closest(".game_block");
   const enWord = wordCheckBlock.querySelector(".game_block-word").textContent;
   let wordData;
+
   if (globalState.source === "server") {
-    wordData = searchServerWord(state.wordsQuantity);
+    wordData = searchServerWord(enWord);
   }
   if (globalState.source === "storage") {
     wordData = searchWordLocal(enWord);
   }
-  console.log(wordData);
+
   const inputToCheck = wordCheckBlock.querySelector(".game_block-answer");
   const value = inputToCheck.value;
+
   if (value === wordData.ru) {
-    wordCheckBlock.style.background = `rgb(10,150,50)`;
     wordCheckBlock.dataset.answer = "true";
+    wordCheckBlock.style.background = `rgb(10,150,50)`;
   } else {
     wordCheckBlock.dataset.answer = "false";
     wordCheckBlock.style.background = `rgb(100,1,1)`;
   }
   inputToCheck.disabled = true;
   e.target.disabled = true;
-  this.removeEventListener("click", handleCheckButton);
+  e.target.removeEventListener("click", handleAnswerButtonClick);
 }
 
 async function handleGamePageClick(e) {
   if (e.target.classList.contains("game-start-btn")) {
+    //render?
     const startGameBtn = document.querySelector(".game-start-btn");
     startGameBtn.disabled = true;
+
     await startGame(gameState);
   }
   if (e.target.classList.contains("game_block-btn")) {
+    handleAnswerButtonClick(e);
     const wordBlock = e.target.closest(".game_block");
-    if (wordBlock.dataset.answer === "true") gameState.rightAnswers += 1;
     //maybe should be on module
+    if (wordBlock.dataset.answer === "true") gameState.rightAnswers += 1;
     gameState.playerMoves += 1;
+
     updateStateBlock(gameState.rightAnswers, gameState.wordsQuantity);
   }
   if (gameState.wordsQuantity <= gameState.playerMoves) {
-    //!remove end button
-    const endButton = updateFinalWrapperBlock(gameState);
+    updateFinalWrapperBlock(gameState);
 
-    function restartGame() {
-      gameState.playerMoves = 0;
-      gameState.rightAnswers = 0;
-      removeGameWrapperBlock();
-      startGame(gameState);
-      endButton.removeEventListener("click", restartGame);
+    const endButton = document.querySelector(".game-btn_end");
+    endButton.addEventListener("click", restartGame);
+  }
+}
+
+function handleGameOptions(e) {
+  if (e.target.classList.contains("game-src_btn")) {
+    const btn = e.target;
+
+    if (btn.dataset.src === "server") {
+      gameState.source = "server";
+      //if server, send request to server if it answers, ok
+      //else tell to chose localStorage or add words by your self
+      console.log("hi server");
     }
 
-    endButton.addEventListener("click", restartGame);
+    if (btn.dataset.src === "storage") {
+      gameState.source = "storage";
+    }
   }
 }
 
 export async function runGamePage(state) {
   renderGamePage(state);
-  const gamePage = document.querySelector(".game-page");
 
+  const gamePage = document.querySelector(".game-page");
   gamePage.addEventListener("click", handleGamePageClick);
+
+  const gameOptBlock = document.querySelector(".game-src");
+  gameOptBlock.addEventListener("click", handleGameOptions);
 }

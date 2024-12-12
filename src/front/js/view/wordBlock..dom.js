@@ -1,4 +1,4 @@
-import { handleCheckButton } from "../controller/gamePage.controller.js";
+// import { handleCheckButton } from "../controller/gamePage.controller.js";
 import { createInput, createTag } from "./createElement.view.js";
 
 export function createWordBlock(wordData) {
@@ -20,9 +20,6 @@ export function createWordBlock(wordData) {
     className: "game_block-btn",
     textContent: "Ok",
   });
-
-  //!remove listener
-  answerButton.addEventListener("click", handleCheckButton);
 
   wordCheckBlock.append(enWordDiv);
   wordCheckBlock.append(ruWordInput);
