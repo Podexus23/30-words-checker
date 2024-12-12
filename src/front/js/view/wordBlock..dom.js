@@ -1,21 +1,27 @@
-import { handleCheckButton } from "../controller/game.controller.js";
+import { handleCheckButton } from "../controller/gamePage.controller.js";
+import { createInput, createTag } from "./createElement.view.js";
 
 export function createWordBlock(wordData) {
-  const wordCheckBlock = document.createElement("div");
-  wordCheckBlock.className = `game_block`;
+  const wordCheckBlock = createTag({ tagName: "div", className: "game_block" });
 
-  const enWordDiv = document.createElement("div");
-  enWordDiv.className = `game_block-word`;
-  enWordDiv.textContent = wordData.en;
+  const enWordDiv = createTag({
+    tagName: "div",
+    className: "game_block-word",
+    textContent: wordData.en,
+  });
 
-  const ruWordInput = document.createElement("input");
-  ruWordInput.type = "text";
-  ruWordInput.className = "game_block-answer";
+  const ruWordInput = createInput({
+    type: "text",
+    className: "game_block-answer",
+  });
 
-  const answerButton = document.createElement("button");
-  answerButton.className = "game_block-btn";
-  answerButton.textContent = "Ok";
+  const answerButton = createTag({
+    tagName: "button",
+    className: "game_block-btn",
+    textContent: "Ok",
+  });
 
+  //!remove listener
   answerButton.addEventListener("click", handleCheckButton);
 
   wordCheckBlock.append(enWordDiv);
@@ -26,11 +32,11 @@ export function createWordBlock(wordData) {
 }
 
 export function createStateBlock(countTo) {
-  const wrapper = document.createElement("div");
-  wrapper.className = "game_state";
-
-  wrapper.textContent = `0 / ${countTo}`;
-  return wrapper;
+  return createTag({
+    tagName: "div",
+    className: "game_state",
+    textContent: `0 / ${countTo}`,
+  });
 }
 
 export function updateStateBlock(number, countTo) {
@@ -39,8 +45,11 @@ export function updateStateBlock(number, countTo) {
 }
 
 export function addWordToWordsBlock(word, data) {
-  const wordBlock = document.createElement("div");
-  wordBlock.textContent = `${data[word].en} - ${data[word].ru}`;
+  const wordBlock = createTag({
+    tagName: "div",
+    className: "words_all-word",
+    textContent: `${data[word].en} - ${data[word].ru}`,
+  });
 
   const allWordsBlock = document.querySelector(".words_all");
   allWordsBlock.append(wordBlock);

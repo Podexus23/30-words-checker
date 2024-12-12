@@ -1,10 +1,10 @@
-import { startGame } from "./js/controller/game.controller.js";
+import { runGamePage, startGame } from "./js/controller/gamePage.controller.js";
+import { runMainPage } from "./js/controller/mainPage.controller.js";
 import {
   removeGameWrapperBlock,
   renderGamePage,
   updateFinalWrapperBlock,
 } from "./js/view/renderGame.view.js";
-import { renderMainPage } from "./js/view/renderMain.view.js";
 import { updateStateBlock } from "./js/view/wordBlock..dom.js";
 
 export const globalState = {
@@ -16,7 +16,7 @@ export const globalState = {
 //ADD WORD FORM
 const isMainPage = document.querySelector(".main-page");
 if (isMainPage) {
-  renderMainPage(globalState);
+  runMainPage(globalState);
 }
 
 // GAME
@@ -24,41 +24,42 @@ if (isMainPage) {
 const isGamePage = document.querySelector(".game-page");
 
 if (isGamePage) {
-  const gameState = {
-    wordsQuantity: 5,
-    playerMoves: 0,
-    rightAnswers: 0,
-    source: globalState.source,
-  };
-  renderGamePage(globalState);
+  // const gameState = {
+  //   wordsQuantity: 5,
+  //   playerMoves: 0,
+  //   rightAnswers: 0,
+  //   source: globalState.source,
+  // };
 
-  isGamePage.addEventListener("click", async (e) => {
-    if (e.target.classList.contains("game-start-btn")) {
-      const startGameBtn = document.querySelector(".game-start-btn");
-      await startGame(gameState, isGamePage);
-      startGameBtn.disabled = true;
-    }
-    if (e.target.classList.contains("game_block-btn")) {
-      const wordBlock = e.target.closest(".game_block");
-      if (wordBlock.dataset.answer === "true") gameState.rightAnswers += 1;
-      gameState.playerMoves += 1;
-      updateStateBlock(gameState.rightAnswers, gameState.wordsQuantity);
-    }
-    if (gameState.wordsQuantity <= gameState.playerMoves) {
-      //!remove end button
-      const endButton = updateFinalWrapperBlock(gameState);
+  runGamePage(globalState);
 
-      function restartGame() {
-        gameState.playerMoves = 0;
-        gameState.rightAnswers = 0;
-        removeGameWrapperBlock();
-        startGame(gameState, isGamePage);
-        endButton.removeEventListener("click", restartGame);
-      }
+  // isGamePage.addEventListener("click", async (e) => {
+  //   if (e.target.classList.contains("game-start-btn")) {
+  //     const startGameBtn = document.querySelector(".game-start-btn");
+  //     await startGame(gameState, isGamePage);
+  //     startGameBtn.disabled = true;
+  //   }
+  //   if (e.target.classList.contains("game_block-btn")) {
+  //     const wordBlock = e.target.closest(".game_block");
+  //     if (wordBlock.dataset.answer === "true") gameState.rightAnswers += 1;
+  //     gameState.playerMoves += 1;
+  //     updateStateBlock(gameState.rightAnswers, gameState.wordsQuantity);
+  //   }
+  //   if (gameState.wordsQuantity <= gameState.playerMoves) {
+  //     //!remove end button
+  //     const endButton = updateFinalWrapperBlock(gameState);
 
-      endButton.addEventListener("click", restartGame);
-    }
-  });
+  //     function restartGame() {
+  //       gameState.playerMoves = 0;
+  //       gameState.rightAnswers = 0;
+  //       removeGameWrapperBlock();
+  //       startGame(gameState, isGamePage);
+  //       endButton.removeEventListener("click", restartGame);
+  //     }
+
+  //     endButton.addEventListener("click", restartGame);
+  //   }
+  // });
 
   const gameOptBlock = document.querySelector(".game-src");
 
@@ -79,7 +80,7 @@ if (isGamePage) {
     }
   });
 
-  window.addEventListener("beforeunload", () => {
-    window.localStorage.setItem("WC_words", JSON.stringify(tempWords));
-  });
+  // window.addEventListener("beforeunload", () => {
+  //   window.localStorage.setItem("WC_words", JSON.stringify(tempWords));
+  // });
 }

@@ -1,5 +1,6 @@
 import { globalState } from "../../main.js";
 import { renderDataState } from "../view/renderDataState.view.js";
+import { renderMainPage } from "../view/renderMain.view.js";
 import { addWordToWordsBlock } from "../view/wordBlock..dom.js";
 
 export async function handleSubmitAddWordForm(e) {
@@ -23,4 +24,14 @@ export async function handleGetWordsButton(e) {
   if (globalState.source === "storage")
     data = await renderDataState.storage.getAllWords();
   Object.keys(data).forEach((word) => addWordToWordsBlock(word, data));
+}
+
+export function runMainPage(state) {
+  //render main page and add all listeners
+  renderMainPage(state);
+  const addWordForm = document.querySelector(".add-word-form");
+  const getWordsBtn = document.querySelector(".words_get-btn");
+
+  addWordForm.addEventListener("submit", handleSubmitAddWordForm);
+  getWordsBtn.addEventListener("click", handleGetWordsButton);
 }

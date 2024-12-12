@@ -1,21 +1,15 @@
-import { globalState } from "../../main.js";
-import {
-  handleGetWordsButton,
-  handleSubmitAddWordForm,
-} from "../controller/mainPage.controller.js";
 import {
   createForm,
   createImage,
   createInput,
   createLink,
   createTag,
-} from "./elements.dom.js";
+} from "./createElement.view.js";
 import { renderDataState } from "./renderDataState.view.js";
 
-export function renderMainPage(state) {
-  const isMainPage = document.querySelector(".main-page");
+const isMainPage = document.querySelector(".main-page");
 
-  //HEADER
+function renderHeadBlock(state) {
   const header = createTag({ tagName: "header", className: "header" });
   const heading = createTag({
     tagName: "h1",
@@ -37,9 +31,9 @@ export function renderMainPage(state) {
   header.append(heading);
   header.append(subHeading);
   header.append(gamePageLink);
+}
 
-  //MAIN
-
+function renderMainBlock(state) {
   const main = createTag({ tagName: "main", className: "main" });
   const addWordForm = createForm({
     action: "/api/word",
@@ -47,7 +41,6 @@ export function renderMainPage(state) {
     name: "addWord",
     className: "add-word-form",
   });
-  addWordForm.addEventListener("submit", handleSubmitAddWordForm);
 
   const fieldAddWord = createTag({
     tagName: "fieldset",
@@ -88,8 +81,9 @@ export function renderMainPage(state) {
   fieldAddWord.append(enWordInput);
   fieldAddWord.append(ruWordInput);
   fieldAddWord.append(submitBtn);
-  //FOOTER
+}
 
+function renderFooterBlock(state) {
   const footer = createTag({ tagName: "footer", className: "footer" });
 
   const wordsBlock = createTag({
@@ -102,7 +96,6 @@ export function renderMainPage(state) {
     className: "words_get-btn",
     textContent: "Get Words",
   });
-  showWordsBtn.addEventListener("click", handleGetWordsButton);
 
   const allWordsBlock = createTag({ tagName: "div", className: "words_all" });
 
@@ -117,4 +110,13 @@ export function renderMainPage(state) {
   wordsBlock.append(showWordsBtn);
   wordsBlock.append(allWordsBlock);
   footer.append(footerPic);
+}
+
+export function renderMainPage(state) {
+  //HEADER
+  renderHeadBlock(state);
+  //MAIN
+  renderMainBlock(state);
+  //FOOTER
+  renderFooterBlock(state);
 }
