@@ -1,4 +1,4 @@
-import { createLink, createTag } from "./createElement.view.js";
+import { createInput, createLink, createTag } from "./createElement.view.js";
 
 const gamePage = document.querySelector(".game-page");
 

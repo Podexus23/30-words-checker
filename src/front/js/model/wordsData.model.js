@@ -1,3 +1,4 @@
+import { localAddress } from "../../main.js";
 import { ENUM_SRC } from "../helper/enum.js";
 
 const WORDS = {
@@ -47,7 +48,6 @@ export async function initInMemory(state) {
       break;
     }
   }
-  console.log(inMemoryWords);
 }
 
 export function searchWord(word) {
@@ -81,9 +81,13 @@ async function getDataFromServer() {
   return await (await fetch("/api/words", { method: "get" })).json();
 }
 
+async function updateServerData(data) {
+  await fetch("/api/words", { method: "POST", body: data });
+}
+
 //localStorage DATA
 export function getDataFromLocalStorage() {
-  const storageData = window.localStorage.getItem("WC_words");
+  const storageData = window.localStorage.getItem(localAddress.src1);
 
   if (!storageData) return WORDS;
 
@@ -93,10 +97,27 @@ export function getDataFromLocalStorage() {
   return data;
 }
 
-export const updateJsonLocal = async () => {
+export const updateLocalData = async (data) => {
   try {
-    window.localStorage.setItem("WC_words", JSON.stringify(localDB));
+    window.localStorage.setItem(localAddress.src1, JSON.stringify(data));
   } catch (err) {
     console.error(err.message);
   }
 };
+
+export async function updateRemoteData(state) {
+  switch (state.source) {
+    case ENUM_SRC.server: {
+      const data = JSON.stringify(inMemoryWords);
+      updateServerData(data);
+      break;
+    }
+  }
+  switch (state.source) {
+    case ENUM_SRC.local: {
+      const data = inMemoryWords;
+      updateLocalData(data);
+      break;
+    }
+  }
+}

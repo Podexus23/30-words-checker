@@ -1,4 +1,8 @@
-import { addWord, getAllWords } from "../model/wordsData.model.js";
+import {
+  addWord,
+  getAllWords,
+  updateRemoteData,
+} from "../model/wordsData.model.js";
 import {
   addWordToWordsBlock,
   renderMainPage,
@@ -23,6 +27,9 @@ export async function handleGetWordsButton(e) {
 export function runMainPage(state) {
   //render main page and add all listeners
   renderMainPage(renderState[state.source]);
+  window.addEventListener("beforeunload", (e) => {
+    updateRemoteData(state);
+  });
   const addWordForm = document.querySelector(".add-word-form");
   const getWordsBtn = document.querySelector(".words_get-btn");
 

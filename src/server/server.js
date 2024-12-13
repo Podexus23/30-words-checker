@@ -2,7 +2,7 @@ import http from "http";
 import { respondFrontFiles, respondJSON } from "./helpers.js";
 import { parse } from "url";
 import { extname } from "path";
-import { addWord, getWords } from "../db/api.db.js";
+import { addWord, addWords, getWords } from "../db/api.db.js";
 
 const { default: db } = await import("../db/words.json", {
   with: { type: "json" },
@@ -62,6 +62,16 @@ const server = http.createServer(async (req, res) => {
         const { en_word, ru_word } = JSON.parse(body);
         const dataToDB = { name: en_word, en_word, ru_word };
         addWord(dataToDB);
+      });
+    }
+    if (req.url === "/api/words") {
+      let body = "";
+
+      req.on("data", (chunk) => (body += chunk.toString()));
+
+      req.on("end", () => {
+        const parsedBody = JSON.parse(body);
+        addWords(parsedBody);
       });
     }
   }

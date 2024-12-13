@@ -1,5 +1,10 @@
-import { globalState } from "../../main.js";
-import { searchWord } from "../model/wordsData.model.js";
+import { getQuantityOfWords, searchWord } from "../model/wordsData.model.js";
+import {
+  checkEndGame,
+  getGameState,
+  initGameState,
+  updateGameState,
+} from "../model/wordsGame.model.js";
 import {
   removeGameWrapperBlock,
   renderGamePage,
@@ -10,34 +15,14 @@ import {
 } from "../view/renderGame.view.js";
 import { renderState } from "./state.controller.js";
 
-//maybe remove to model of game
-const gameState = {
-  wordsQuantity: 5,
-  playerMoves: 0,
-  rightAnswers: 0,
-};
-
-function initGameState(state) {
-  gameState.wordsQuantity = 5;
-  gameState.playerMoves = 0;
-  gameState.rightAnswers = 0;
-  gameState.source = state.source;
-}
-
-async function startGame(state) {
+async function startGame() {
   const gamePage = document.querySelector(".game-page");
 
-  initGameState(globalState);
+  const state = initGameState();
   //create block wor game words
   renderWrapperBlock(gamePage);
 
-  let words;
-  if (state.source === "server") {
-    words = await getRandomWordsFromServer(state.wordsQuantity);
-  }
-  if (state.source === "storage") {
-    words = await getRandomWordsFromLocalStorage(state.wordsQuantity);
-  }
+  let words = await getQuantityOfWords(state.wordsQuantity);
 
   //add all words inputs
   updateGameWrapperBlock(words);
@@ -46,7 +31,7 @@ async function startGame(state) {
 function restartGame() {
   this.removeEventListener("click", restartGame);
   removeGameWrapperBlock();
-  startGame(gameState);
+  startGame();
 }
 
 function handleAnswerButtonClick(e) {
@@ -71,22 +56,21 @@ function handleAnswerButtonClick(e) {
 
 async function handleGamePageClick(e) {
   if (e.target.classList.contains("game-start-btn")) {
-    //render?
-    const startGameBtn = document.querySelector(".game-start-btn");
-    startGameBtn.disabled = true;
-
-    await startGame(gameState);
+    await startGame();
   }
   if (e.target.classList.contains("game_block-btn")) {
     handleAnswerButtonClick(e);
     const wordBlock = e.target.closest(".game_block");
-    //maybe should be on module
-    if (wordBlock.dataset.answer === "true") gameState.rightAnswers += 1;
-    gameState.playerMoves += 1;
+    if (wordBlock.dataset.answer === "true") {
+      updateGameState("rightAnswers", 1);
+    }
+    updateGameState("playerMoves", 1);
 
+    const gameState = getGameState();
     updateStateBlock(gameState.rightAnswers, gameState.wordsQuantity);
   }
-  if (gameState.wordsQuantity <= gameState.playerMoves) {
+  if (checkEndGame()) {
+    const gameState = getGameState();
     updateFinalWrapperBlock(gameState);
 
     const endButton = document.querySelector(".game-btn_end");
@@ -94,22 +78,22 @@ async function handleGamePageClick(e) {
   }
 }
 
-function handleGameOptions(e) {
-  if (e.target.classList.contains("game-src_btn")) {
-    const btn = e.target;
+// function handleGameOptions(e) {
+//   if (e.target.classList.contains("game-src_btn")) {
+//     const btn = e.target;
 
-    if (btn.dataset.src === "server") {
-      gameState.source = "server";
-      //if server, send request to server if it answers, ok
-      //else tell to chose localStorage or add words by your self
-      console.log("hi server");
-    }
+//     if (btn.dataset.src === "server") {
+//       gameState.source = "server";
+//       //if server, send request to server if it answers, ok
+//       //else tell to chose localStorage or add words by your self
+//       console.log("hi server");
+//     }
 
-    if (btn.dataset.src === "storage") {
-      gameState.source = "storage";
-    }
-  }
-}
+//     if (btn.dataset.src === "storage") {
+//       gameState.source = "storage";
+//     }
+//   }
+// }
 
 export async function runGamePage(state) {
   renderGamePage(renderState[state.source]);
@@ -117,6 +101,6 @@ export async function runGamePage(state) {
   const gamePage = document.querySelector(".game-page");
   gamePage.addEventListener("click", handleGamePageClick);
 
-  const gameOptBlock = document.querySelector(".game-src");
-  gameOptBlock.addEventListener("click", handleGameOptions);
+  // const gameOptBlock = document.querySelector(".game-src");
+  // gameOptBlock.addEventListener("click", handleGameOptions);
 }

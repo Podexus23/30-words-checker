@@ -25,7 +25,16 @@ export const getWords = () => inMemoryDB;
 
 export const addWord = (wordData) => {
   if (searchWord(wordData.name)) return;
-  inMemoryDB[wordData.name] = { en: wordData.en_word, ru: wordData.ru_word };
+  console.log("addWord: added");
+  inMemoryDB[wordData.name] = { en: wordData.en, ru: wordData.ru };
+  updateJson();
+};
+
+export const addWords = (wordData) => {
+  Object.keys(wordData).forEach((word) => {
+    wordData[word].name = word;
+    addWord(wordData[word]);
+  });
   updateJson();
 };
 
@@ -40,7 +49,7 @@ export const removeWord = (word) => {
 // {name: cop, en_word: cup, ru_word: чашка}
 export const updateWord = (wordData) => {
   if (!searchWord(wordData.name)) return;
-  inMemoryDB[wordData.name] = { en: wordData.en_word, ru: wordData.ru_word };
+  inMemoryDB[wordData.name] = { en: wordData.en, ru: wordData.ru };
   updateJson();
 };
 

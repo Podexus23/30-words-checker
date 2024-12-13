@@ -2,10 +2,15 @@ import { runGamePage } from "./js/controller/gamePage.controller.js";
 import { runMainPage } from "./js/controller/mainPage.controller.js";
 import { initInMemory } from "./js/model/wordsData.model.js";
 
+export const localAddress = {
+  src1: "WC_words",
+  src2: "WC_2024",
+};
+
 export const globalState = {
-  // source: "local",
+  source: "local",
   // source: "indexedDB",
-  source: "server",
+  // source: "server",
 };
 
 await initInMemory(globalState);
