@@ -1,18 +1,14 @@
 import { globalState } from "../../main.js";
-import {
-  getRandomWordsFromLocalStorage,
-  getRandomWordsFromServer,
-  searchServerWord,
-} from "../model/game.model.js";
-import { searchWordLocal } from "../model/storage.model.js";
+import { searchWord } from "../model/wordsData.model.js";
 import {
   removeGameWrapperBlock,
   renderGamePage,
   renderWrapperBlock,
   updateFinalWrapperBlock,
   updateGameWrapperBlock,
+  updateStateBlock,
 } from "../view/renderGame.view.js";
-import { updateStateBlock } from "../view/wordBlock..dom.js";
+import { renderState } from "./state.controller.js";
 
 //maybe remove to model of game
 const gameState = {
@@ -56,14 +52,7 @@ function restartGame() {
 function handleAnswerButtonClick(e) {
   const wordCheckBlock = e.target.closest(".game_block");
   const enWord = wordCheckBlock.querySelector(".game_block-word").textContent;
-  let wordData;
-
-  if (globalState.source === "server") {
-    wordData = searchServerWord(enWord);
-  }
-  if (globalState.source === "storage") {
-    wordData = searchWordLocal(enWord);
-  }
+  let wordData = searchWord(enWord);
 
   const inputToCheck = wordCheckBlock.querySelector(".game_block-answer");
   const value = inputToCheck.value;
@@ -123,7 +112,7 @@ function handleGameOptions(e) {
 }
 
 export async function runGamePage(state) {
-  renderGamePage(state);
+  renderGamePage(renderState[state.source]);
 
   const gamePage = document.querySelector(".game-page");
   gamePage.addEventListener("click", handleGamePageClick);

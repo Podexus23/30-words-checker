@@ -1,34 +1,28 @@
-import { globalState } from "../../main.js";
-import { renderDataState } from "../view/renderDataState.view.js";
-import { renderMainPage } from "../view/renderMain.view.js";
-import { addWordToWordsBlock } from "../view/wordBlock..dom.js";
+import { addWord, getAllWords } from "../model/wordsData.model.js";
+import {
+  addWordToWordsBlock,
+  renderMainPage,
+} from "../view/renderMain.view.js";
+import { renderState } from "./state.controller.js";
 
 export async function handleSubmitAddWordForm(e) {
   e.preventDefault();
   const data = new FormData(e.target);
-  const dataToSend = JSON.stringify(
+  const wordToSend = JSON.stringify(
     Object.fromEntries(Array.from(data.entries()))
   );
   e.target.reset();
-  if (globalState.source === "server")
-    renderDataState.server.sendWord(dataToSend);
-  if (globalState.source === "storage") {
-    renderDataState.storage.sendWord(dataToSend);
-  }
+  addWord(wordToSend);
 }
 
 export async function handleGetWordsButton(e) {
-  let data;
-  if (globalState.source === "server")
-    data = await renderDataState.server.getAllWords();
-  if (globalState.source === "storage")
-    data = await renderDataState.storage.getAllWords();
+  let data = getAllWords();
   Object.keys(data).forEach((word) => addWordToWordsBlock(word, data));
 }
 
 export function runMainPage(state) {
   //render main page and add all listeners
-  renderMainPage(state);
+  renderMainPage(renderState[state.source]);
   const addWordForm = document.querySelector(".add-word-form");
   const getWordsBtn = document.querySelector(".words_get-btn");
 

@@ -36,7 +36,7 @@ const server = http.createServer(async (req, res) => {
       return;
     }
 
-    if (req.url === "/data") {
+    if (req.url === "/api/words") {
       respondJSON(res, 200, getWords());
       return;
     }

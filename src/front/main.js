@@ -1,11 +1,14 @@
 import { runGamePage } from "./js/controller/gamePage.controller.js";
 import { runMainPage } from "./js/controller/mainPage.controller.js";
+import { initInMemory } from "./js/model/wordsData.model.js";
 
 export const globalState = {
-  source: "storage",
+  // source: "local",
   // source: "indexedDB",
-  // source: "server",
+  source: "server",
 };
+
+await initInMemory(globalState);
 
 //ADD WORD FORM
 const isMainPage = document.querySelector(".main-page");

@@ -1,8 +1,46 @@
 import { createLink, createTag } from "./createElement.view.js";
-import { renderDataState } from "./renderDataState.view.js";
-import { createStateBlock, createWordBlock } from "./wordBlock..dom.js";
 
 const gamePage = document.querySelector(".game-page");
+
+export function createWordBlock(wordData) {
+  const wordCheckBlock = createTag({ tagName: "div", className: "game_block" });
+
+  const enWordDiv = createTag({
+    tagName: "div",
+    className: "game_block-word",
+    textContent: wordData.en,
+  });
+
+  const ruWordInput = createInput({
+    type: "text",
+    className: "game_block-answer",
+  });
+
+  const answerButton = createTag({
+    tagName: "button",
+    className: "game_block-btn",
+    textContent: "Ok",
+  });
+
+  wordCheckBlock.append(enWordDiv);
+  wordCheckBlock.append(ruWordInput);
+  wordCheckBlock.append(answerButton);
+
+  return wordCheckBlock;
+}
+
+export function createStateBlock(countTo) {
+  return createTag({
+    tagName: "div",
+    className: "game_state",
+    textContent: `0 / ${countTo}`,
+  });
+}
+
+export function updateStateBlock(number, countTo) {
+  const counterBlock = document.querySelector(".game_state");
+  counterBlock.textContent = `${number} / ${countTo}`;
+}
 
 function renderAsideBlock(state) {
   const aside = createTag({ tagName: "aside", className: "aside" });
@@ -38,7 +76,7 @@ function renderHeaderBlock(state) {
   });
 
   const mainLink = createLink({
-    href: `${renderDataState[state.source].toMainPageLink}`,
+    href: `${state?.toMainPageLink || "/"}`,
     textContent: "Welcome back",
     className: "main-link link",
   });

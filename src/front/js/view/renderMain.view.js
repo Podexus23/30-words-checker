@@ -5,7 +5,6 @@ import {
   createLink,
   createTag,
 } from "./createElement.view.js";
-import { renderDataState } from "./renderDataState.view.js";
 
 const isMainPage = document.querySelector(".main-page");
 
@@ -18,7 +17,7 @@ function renderHeadBlock(state) {
   });
   const gamePageLink = createLink({
     className: "header_game-link",
-    href: `${renderDataState[state.source].toGamePageLink}`,
+    href: `${state?.toGamePageLink || "/game"}`,
     textContent: "Let's start a game",
   });
   const subHeading = createTag({
@@ -110,6 +109,17 @@ function renderFooterBlock(state) {
   wordsBlock.append(showWordsBtn);
   wordsBlock.append(allWordsBlock);
   footer.append(footerPic);
+}
+
+export function addWordToWordsBlock(word, data) {
+  const wordBlock = createTag({
+    tagName: "div",
+    className: "words_all-word",
+    textContent: `${data[word].en} - ${data[word].ru}`,
+  });
+
+  const allWordsBlock = document.querySelector(".words_all");
+  allWordsBlock.append(wordBlock);
 }
 
 export function renderMainPage(state) {
