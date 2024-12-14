@@ -78,29 +78,9 @@ async function handleGamePageClick(e) {
   }
 }
 
-// function handleGameOptions(e) {
-//   if (e.target.classList.contains("game-src_btn")) {
-//     const btn = e.target;
-
-//     if (btn.dataset.src === "server") {
-//       gameState.source = "server";
-//       //if server, send request to server if it answers, ok
-//       //else tell to chose localStorage or add words by your self
-//       console.log("hi server");
-//     }
-
-//     if (btn.dataset.src === "storage") {
-//       gameState.source = "storage";
-//     }
-//   }
-// }
-
 export async function runGamePage(state) {
   renderGamePage(renderState[state.source]);
 
   const gamePage = document.querySelector(".game-page");
   gamePage.addEventListener("click", handleGamePageClick);
-
-  // const gameOptBlock = document.querySelector(".game-src");
-  // gameOptBlock.addEventListener("click", handleGameOptions);
 }

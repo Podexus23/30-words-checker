@@ -3,7 +3,11 @@ export const renderState = {
     toMainPageLink: "/",
     toGamePageLink: "/game",
   },
-  storage: {
+  local: {
+    toMainPageLink: "../index.html",
+    toGamePageLink: "./pages/game.html",
+  },
+  indexedDB: {
     toMainPageLink: "../index.html",
     toGamePageLink: "./pages/game.html",
   },

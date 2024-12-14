@@ -8,9 +8,10 @@ export const localAddress = {
 };
 
 export const globalState = {
-  source: "local",
-  // source: "indexedDB",
+  // source: "local",
+  source: "indexedDB",
   // source: "server",
+  // source: "test"
 };
 
 await initInMemory(globalState);

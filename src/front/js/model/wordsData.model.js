@@ -43,6 +43,10 @@ export async function initInMemory(state) {
       inMemoryWords = getDataFromLocalStorage();
       break;
     }
+    case ENUM_SRC.indexed: {
+      inMemoryWords = await getAllDataFromIndexedDB();
+      break;
+    }
     default: {
       inMemoryWords = WORDS;
       break;
@@ -105,6 +109,63 @@ export const updateLocalData = async (data) => {
   }
 };
 
+//indexedDB Data
+async function getAllDataFromIndexedDB() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(localAddress.src1, 1);
+
+    request.onsuccess = (e) => {
+      const db = e.target.result;
+      const transaction = db.transaction("words", "readonly");
+      const store = transaction.objectStore("words");
+
+      const allWords = store.getAll();
+
+      allWords.onsuccess = () => {
+        const res = allWords.result.reduce((acc, cur) => {
+          const { name, en, ru } = cur;
+          acc[name] = { en, ru };
+          return acc;
+        }, {});
+        resolve(res);
+      };
+      allWords.onerror = (event) => {
+        reject(event.target.error);
+      };
+    };
+
+    request.onerror = (event) => {
+      reject(event.target.error);
+    };
+  });
+}
+
+async function updateIndexedDBData(data) {
+  const request = indexedDB.open(localAddress.src1, 1);
+
+  request.onsuccess = (e) => {
+    const db = e.target.result;
+
+    Object.keys(data).forEach((word) => {
+      const transaction = db.transaction("words", "readwrite");
+      const store = transaction.objectStore("words");
+      const dbData = { name: word, en: data[word].en, ru: data[word].ru };
+      const addWord = store.add(dbData);
+
+      addWord.onsuccess = () => {
+        console.log(`Word: ${word} added`);
+      };
+      addWord.onerror = (event) => {
+        console.error(event.target.error);
+      };
+    });
+  };
+
+  request.onerror = (event) => {
+    console.error(event.target.error);
+  };
+}
+
 export async function updateRemoteData(state) {
   switch (state.source) {
     case ENUM_SRC.server: {
@@ -112,11 +173,14 @@ export async function updateRemoteData(state) {
       updateServerData(data);
       break;
     }
-  }
-  switch (state.source) {
     case ENUM_SRC.local: {
       const data = inMemoryWords;
       updateLocalData(data);
+      break;
+    }
+    case ENUM_SRC.indexed: {
+      const data = inMemoryWords;
+      updateIndexedDBData(data);
       break;
     }
   }
