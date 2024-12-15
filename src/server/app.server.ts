@@ -1,8 +1,7 @@
 import http from "http";
-import { respondFrontFiles, respondJSON } from "./helpers.js";
-import { parse } from "url";
 import { extname } from "path";
-import { addWord, addWords, getWords } from "../db/api.db.js";
+import { parse } from "url";
+import { addWord, addWords } from "../db/api.db.js";
 
 const PORT = 3000;
 
@@ -10,6 +9,7 @@ const server = http.createServer(async (req, res) => {
   // GET METHOD
   if (req.method === "GET" && req.url) {
     const parsedUrl = parse(req.url, true);
+    // if (!parsedUrl.pathname) return;
     const ext = extname(parsedUrl.pathname);
 
     if (ext) {
@@ -55,8 +55,8 @@ const server = http.createServer(async (req, res) => {
       req.on("data", (chunk) => (body += chunk.toString()));
 
       req.on("end", () => {
-        const { en_word, ru_word } = JSON.parse(body);
-        const dataToDB = { name: en_word, en_word, ru_word };
+        const { en_word: en, ru_word: ru } = JSON.parse(body);
+        const dataToDB = { en, ru };
         addWord(dataToDB);
       });
     }
