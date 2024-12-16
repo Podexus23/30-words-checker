@@ -8,7 +8,6 @@ export default [
   {
     ignores: [".node_modules/*", "dist/"],
   },
-  // { files: ["**/*.{js,mjs,cjs,ts,jsx,tsx}"] },
   {
     files: ["src/**/*.ts", "src/**/*.tsx"],
     languageOptions: {

@@ -18,7 +18,7 @@ const getRandom = (min, max) =>
 export function generateRandomWords(wordsArr, quantity = 5) {
   if (quantity > wordsArr.length) {
     console.error(
-      `generateRandomWords: to much to words add, try less than ${wordsArr.length}`
+      `generateRandomWords: to much to words add, try less than ${wordsArr.length}`,
     );
     return;
   }

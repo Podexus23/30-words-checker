@@ -13,7 +13,7 @@ export async function handleSubmitAddWordForm(e) {
   e.preventDefault();
   const data = new FormData(e.target);
   const wordToSend = JSON.stringify(
-    Object.fromEntries(Array.from(data.entries()))
+    Object.fromEntries(Array.from(data.entries())),
   );
   e.target.reset();
   addWord(wordToSend);

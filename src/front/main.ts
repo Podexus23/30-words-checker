@@ -1,3 +1,4 @@
+import { SourceType } from "./js/enum.front.js";
 import { runGamePage } from "./js/controller/gamePage.controller.js";
 import { runMainPage } from "./js/controller/mainPage.controller.js";
 import { initInMemory } from "./js/model/wordsData.model.js";
@@ -8,10 +9,7 @@ export const localAddress = {
 };
 
 export const globalState = {
-  // source: "local",
-  // source: "indexedDB",
-  source: "server",
-  // source: "test"
+  source: SourceType.Server,
 };
 
 await initInMemory(globalState);

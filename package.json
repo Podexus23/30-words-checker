@@ -9,6 +9,7 @@
     "lint:fix": "eslint . --fix",
     "build:ts": "tsc --watch",
     "dev:ts": "nodemon dist/index.js",
+    "server:ts": "nodemon dist/server/app.server.js",
     "start": "node src/server/server.js",
     "dev": "nodemon src/server/server.js",
     "browser-sync": "browser-sync start --config bs-config.json",
