@@ -1,7 +1,8 @@
-import { localAddress } from "../../main.js";
-import { ENUM_SRC } from "../helper/enum.js";
+import { LocalAddress, SourceType } from "../enum.front.js";
+import { logError } from "../helpers/log.helper.js";
+import { GlobalState, IDBWords, JSONString, Word } from "../interface.front.js";
 
-const WORDS = {
+const WORDS: IDBWords = {
   cat: { en: "cat", ru: "кот" },
   dog: { en: "dog", ru: "собака" },
   ship: { en: "ship", ru: "корабль" },
@@ -9,23 +10,26 @@ const WORDS = {
   cup: { en: "cup", ru: "чашка" },
 };
 
-let inMemoryWords = {};
+let inMemoryWords: IDBWords = {};
 
 //HELPERS
-const getRandom = (min, max) =>
+const getRandom = (min: number, max: number): number =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
-export function generateRandomWords(wordsArr, quantity = 5) {
+export function generateRandomWords(
+  wordsArr: Word[],
+  quantity = 5,
+): Word[] | null {
   if (quantity > wordsArr.length) {
     console.error(
       `generateRandomWords: to much to words add, try less than ${wordsArr.length}`,
     );
-    return;
+    return null;
   }
-  const chosenWords = [];
+  const chosenWords: Word[] = [];
   for (let i = 0; i < quantity; i++) {
-    let newWord = wordsArr[getRandom(0, wordsArr.length - 1)];
-    let chosenMap = chosenWords.map((e) => e.en);
+    const newWord = wordsArr[getRandom(0, wordsArr.length - 1)];
+    const chosenMap = chosenWords.map((e) => e.en);
     if (!chosenMap.includes(newWord.en)) chosenWords.push(newWord);
     else i--;
   }
@@ -33,17 +37,17 @@ export function generateRandomWords(wordsArr, quantity = 5) {
 }
 
 //inMemory DATA
-export async function initInMemory(state) {
+export async function initInMemory(state: GlobalState) {
   switch (state.source) {
-    case ENUM_SRC.server: {
+    case SourceType.Server: {
       inMemoryWords = await getDataFromServer();
       break;
     }
-    case ENUM_SRC.local: {
+    case SourceType.Local: {
       inMemoryWords = getDataFromLocalStorage();
       break;
     }
-    case ENUM_SRC.indexed: {
+    case SourceType.IndexedDB: {
       inMemoryWords = await getAllDataFromIndexedDB();
       break;
     }
@@ -54,12 +58,12 @@ export async function initInMemory(state) {
   }
 }
 
-export function searchWord(word) {
+export function searchWord(word: string) {
   if (inMemoryWords[word]) return inMemoryWords[word];
   else return null;
 }
 
-export async function getQuantityOfWords(quantity) {
+export async function getQuantityOfWords(quantity: number) {
   const dataArr = Object.values(inMemoryWords);
   return generateRandomWords(dataArr, quantity);
 }
@@ -68,30 +72,30 @@ export function getAllWords() {
   return inMemoryWords;
 }
 
-export async function addWord(word) {
-  const { en_word, ru_word } = JSON.parse(word);
-  if (searchWord(en_word)) {
-    console.log(`addWord: this word: ${en_word} is already in DB`);
-    return;
+export async function addWord(word: string) {
+  const { en_word: en, ru_word: ru } = JSON.parse(word);
+  if (searchWord(en)) {
+    console.log(`addWord: this word: ${en} is already in DB`);
+    return null;
   } else
-    inMemoryWords[en_word] = {
-      en: en_word,
-      ru: ru_word,
+    inMemoryWords[en] = {
+      en,
+      ru,
     };
 }
 
 //SERVER DATA
-async function getDataFromServer() {
+async function getDataFromServer(): Promise<IDBWords> {
   return await (await fetch("/api/words", { method: "get" })).json();
 }
 
-async function updateServerData(data) {
+async function updateServerData(data: JSONString<IDBWords>) {
   await fetch("/api/words", { method: "POST", body: data });
 }
 
 //localStorage DATA
 export function getDataFromLocalStorage() {
-  const storageData = window.localStorage.getItem(localAddress.src1);
+  const storageData = window.localStorage.getItem(LocalAddress.Src1);
 
   if (!storageData) return WORDS;
 
@@ -101,28 +105,29 @@ export function getDataFromLocalStorage() {
   return data;
 }
 
-export const updateLocalData = async (data) => {
+export const updateLocalData = async (data: IDBWords) => {
   try {
-    window.localStorage.setItem(localAddress.src1, JSON.stringify(data));
+    window.localStorage.setItem(LocalAddress.Src1, JSON.stringify(data));
   } catch (err) {
-    console.error(err.message);
+    logError(err);
   }
 };
 
 //indexedDB Data
-async function getAllDataFromIndexedDB() {
+async function getAllDataFromIndexedDB(): Promise<IDBWords> {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(localAddress.src1, 1);
+    const request = indexedDB.open(LocalAddress.Src1, 1);
 
     request.onsuccess = (e) => {
-      const db = e.target.result;
+      const request = e.target as IDBRequest<IDBDatabase>;
+      const db = request.result;
       const transaction = db.transaction("words", "readonly");
       const store = transaction.objectStore("words");
 
       const allWords = store.getAll();
 
       allWords.onsuccess = () => {
-        const res = allWords.result.reduce((acc, cur) => {
+        const res: IDBWords = allWords.result.reduce((acc, cur) => {
           const { name, en, ru } = cur;
           acc[name] = { en, ru };
           return acc;
@@ -130,21 +135,24 @@ async function getAllDataFromIndexedDB() {
         resolve(res);
       };
       allWords.onerror = (event) => {
-        reject(event.target.error);
+        const getRequest = event.target as IDBRequest;
+        reject(getRequest.error);
       };
     };
 
     request.onerror = (event) => {
-      reject(event.target.error);
+      const getRequest = event.target as IDBRequest;
+      reject(getRequest.error);
     };
   });
 }
 
-async function updateIndexedDBData(data) {
-  const request = indexedDB.open(localAddress.src1, 1);
+async function updateIndexedDBData(data: IDBWords) {
+  const request = indexedDB.open(LocalAddress.Src1, 1);
 
   request.onsuccess = (e) => {
-    const db = e.target.result;
+    const request = e.target as IDBRequest<IDBDatabase>;
+    const db = request.result;
 
     Object.keys(data).forEach((word) => {
       const transaction = db.transaction("words", "readwrite");
@@ -156,29 +164,31 @@ async function updateIndexedDBData(data) {
         console.log(`Word: ${word} added`);
       };
       addWord.onerror = (event) => {
-        console.error(event.target.error);
+        const getRequest = event.target as IDBRequest;
+        console.error(getRequest.error);
       };
     });
   };
 
   request.onerror = (event) => {
-    console.error(event.target.error);
+    const getRequest = event.target as IDBRequest;
+    console.error(getRequest.error);
   };
 }
 
-export async function updateRemoteData(state) {
+export async function updateRemoteData(state: GlobalState) {
   switch (state.source) {
-    case ENUM_SRC.server: {
+    case SourceType.Server: {
       const data = JSON.stringify(inMemoryWords);
       updateServerData(data);
       break;
     }
-    case ENUM_SRC.local: {
+    case SourceType.Local: {
       const data = inMemoryWords;
       updateLocalData(data);
       break;
     }
-    case ENUM_SRC.indexed: {
+    case SourceType.IndexedDB: {
       const data = inMemoryWords;
       updateIndexedDBData(data);
       break;

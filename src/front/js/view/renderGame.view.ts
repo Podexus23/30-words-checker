@@ -1,8 +1,10 @@
+import { PageRenderState } from "../enum.front.js";
+import { Word } from "../interface.front.js";
 import { createInput, createLink, createTag } from "./createElement.view.js";
 
-const gamePage = document.querySelector(".game-page");
+const gamePage = document.querySelector(".game-page") as HTMLElement;
 
-export function createWordBlock(wordData) {
+export function createWordBlock(wordData: Word) {
   const wordCheckBlock = createTag({ tagName: "div", className: "game_block" });
 
   const enWordDiv = createTag({
@@ -29,7 +31,7 @@ export function createWordBlock(wordData) {
   return wordCheckBlock;
 }
 
-export function createStateBlock(countTo) {
+export function createStateBlock(countTo: number) {
   return createTag({
     tagName: "div",
     className: "game_state",
@@ -37,12 +39,12 @@ export function createStateBlock(countTo) {
   });
 }
 
-export function updateStateBlock(number, countTo) {
-  const counterBlock = document.querySelector(".game_state");
+export function updateStateBlock(number: number, countTo: number) {
+  const counterBlock = document.querySelector(".game_state") as HTMLElement;
   counterBlock.textContent = `${number} / ${countTo}`;
 }
 
-function renderAsideBlock(state) {
+function renderAsideBlock() {
   const aside = createTag({ tagName: "aside", className: "aside" });
   const optionsBlock = createTag({ tagName: "div", className: "game-options" });
   const srcOptionsBlock = createTag({ tagName: "div", className: "game-src" });
@@ -67,7 +69,7 @@ function renderAsideBlock(state) {
   srcOptionsBlock.append(localButton);
 }
 
-function renderHeaderBlock(state) {
+function renderHeaderBlock(state: PageRenderState) {
   const header = createTag({ tagName: "header", className: "header" });
   const heading = createTag({
     tagName: "h1",
@@ -76,7 +78,7 @@ function renderHeaderBlock(state) {
   });
 
   const mainLink = createLink({
-    href: `${state?.toMainPageLink || "/"}`,
+    href: `${state.toMainPageLink || "/"}`,
     textContent: "Welcome back",
     className: "main-link link",
   });
@@ -86,7 +88,7 @@ function renderHeaderBlock(state) {
   header.append(mainLink);
 }
 
-function renderMainBlock(state) {
+function renderMainBlock() {
   const main = createTag({ tagName: "main", className: "game-main" });
   const startButton = createTag({
     tagName: "button",
@@ -98,22 +100,22 @@ function renderMainBlock(state) {
   main.append(startButton);
 }
 
-export function renderGamePage(state) {
+export function renderGamePage(state: PageRenderState) {
   // ASIDE
-  renderAsideBlock(state);
+  renderAsideBlock();
   // HEADER
   renderHeaderBlock(state);
   // MAIN
-  renderMainBlock(state);
+  renderMainBlock();
 }
 
-export function renderWrapperBlock(parentNode) {
+export function renderWrapperBlock(parentNode: HTMLElement) {
   const gameWrapper = createTag({ tagName: "div", className: "game-wrapper" });
   parentNode.append(gameWrapper);
 }
 
-export function updateGameWrapperBlock(wordsArr) {
-  const gameWrapper = document.querySelector(".game-wrapper");
+export function updateGameWrapperBlock(wordsArr: Word[]) {
+  const gameWrapper = document.querySelector(".game-wrapper") as HTMLElement;
   wordsArr.forEach((word) => {
     gameWrapper.append(createWordBlock(word));
   });
@@ -121,12 +123,18 @@ export function updateGameWrapperBlock(wordsArr) {
 }
 
 export function removeGameWrapperBlock() {
-  const gameWrapper = document.querySelector(".game-wrapper");
+  const gameWrapper = document.querySelector(".game-wrapper") as HTMLElement;
   gameWrapper.remove();
 }
 
-export function updateFinalWrapperBlock({ rightAnswers, wordsQuantity }) {
-  const gameWrapper = document.querySelector(".game-wrapper");
+export function updateFinalWrapperBlock({
+  rightAnswers,
+  wordsQuantity,
+}: {
+  rightAnswers: number;
+  wordsQuantity: number;
+}) {
+  const gameWrapper = document.querySelector(".game-wrapper") as HTMLElement;
 
   const finalBlock = createTag({
     tagName: "div",

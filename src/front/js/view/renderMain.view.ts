@@ -1,3 +1,5 @@
+import { PageRenderState } from "../enum.front.js";
+import { IDBWords } from "../interface.front.js";
 import {
   createForm,
   createImage,
@@ -6,9 +8,9 @@ import {
   createTag,
 } from "./createElement.view.js";
 
-const isMainPage = document.querySelector(".main-page");
+const isMainPage = document.querySelector(".main-page") as HTMLElement;
 
-function renderHeadBlock(state) {
+function renderHeadBlock(state: PageRenderState) {
   const header = createTag({ tagName: "header", className: "header" });
   const heading = createTag({
     tagName: "h1",
@@ -17,7 +19,7 @@ function renderHeadBlock(state) {
   });
   const gamePageLink = createLink({
     className: "header_game-link",
-    href: `${state?.toGamePageLink || "/game"}`,
+    href: `${state.toGamePageLink || "/game"}`,
     textContent: "Let's start a game",
   });
   const subHeading = createTag({
@@ -32,11 +34,11 @@ function renderHeadBlock(state) {
   header.append(gamePageLink);
 }
 
-function renderMainBlock(state) {
+function renderMainBlock() {
   const main = createTag({ tagName: "main", className: "main" });
   const addWordForm = createForm({
     action: "/api/word",
-    method: "post",
+    method: "POST",
     name: "addWord",
     className: "add-word-form",
   });
@@ -70,7 +72,7 @@ function renderMainBlock(state) {
     tagName: "button",
     className: "submit-btn btn",
     textContent: "Submit",
-  });
+  }) as HTMLButtonElement;
   submitBtn.type = "submit";
 
   isMainPage.append(main);
@@ -82,7 +84,7 @@ function renderMainBlock(state) {
   fieldAddWord.append(submitBtn);
 }
 
-function renderFooterBlock(state) {
+function renderFooterBlock() {
   const footer = createTag({ tagName: "footer", className: "footer" });
 
   const wordsBlock = createTag({
@@ -111,22 +113,22 @@ function renderFooterBlock(state) {
   footer.append(footerPic);
 }
 
-export function addWordToWordsBlock(word, data) {
+export function addWordToWordsBlock(word: string, data: IDBWords) {
   const wordBlock = createTag({
     tagName: "div",
     className: "words_all-word",
     textContent: `${data[word].en} - ${data[word].ru}`,
   });
 
-  const allWordsBlock = document.querySelector(".words_all");
+  const allWordsBlock = document.querySelector(".words_all") as HTMLElement;
   allWordsBlock.append(wordBlock);
 }
 
-export function renderMainPage(state) {
+export function renderMainPage(state: PageRenderState) {
   //HEADER
   renderHeadBlock(state);
   //MAIN
-  renderMainBlock(state);
+  renderMainBlock();
   //FOOTER
-  renderFooterBlock(state);
+  renderFooterBlock();
 }

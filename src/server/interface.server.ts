@@ -17,3 +17,5 @@ export type FileExtensions =
   | ".gif"
   | ".svg"
   | ".ico";
+
+export type JSONString<T> = string & { __jsonType?: T };

@@ -1,10 +1,14 @@
-const gameState = {
+import { GameBasicSettings, GameState } from "../interface.front.js";
+
+const gameState: GameState = {
   wordsQuantity: 5,
   playerMoves: 0,
   rightAnswers: 0,
 };
 
-export function initGameState(setting = "default") {
+export function initGameState(
+  setting: GameBasicSettings = "default",
+): GameState {
   switch (setting) {
     default: {
       gameState.wordsQuantity = 5;
@@ -15,11 +19,11 @@ export function initGameState(setting = "default") {
   return gameState;
 }
 
-export function getGameState() {
+export function getGameState(): GameState {
   return gameState;
 }
 
-export function updateGameState(key, add) {
+export function updateGameState(key: keyof GameState, add: number) {
   gameState[key] += add;
 }
 

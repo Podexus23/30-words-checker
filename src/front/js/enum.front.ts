@@ -9,3 +9,27 @@ export enum SourceType {
   Server = "server",
   Test = "test",
 }
+
+export interface PageRenderState {
+  toMainPageLink: string;
+  toGamePageLink: string;
+}
+
+export const renderState = {
+  server: {
+    toMainPageLink: "/",
+    toGamePageLink: "/game",
+  },
+  local: {
+    toMainPageLink: "../index.html",
+    toGamePageLink: "./pages/game.html",
+  },
+  indexedDB: {
+    toMainPageLink: "../index.html",
+    toGamePageLink: "./pages/game.html",
+  },
+  test: {
+    toMainPageLink: "../index.html",
+    toGamePageLink: "./pages/game.html",
+  },
+} as const;

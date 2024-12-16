@@ -1,3 +1,5 @@
+import { renderState } from "../enum.front.js";
+import { GlobalState, Word } from "../interface.front.js";
 import { getQuantityOfWords, searchWord } from "../model/wordsData.model.js";
 import {
   checkEndGame,
@@ -13,33 +15,39 @@ import {
   updateGameWrapperBlock,
   updateStateBlock,
 } from "../view/renderGame.view.js";
-import { renderState } from "./state.controller.js";
 
 async function startGame() {
-  const gamePage = document.querySelector(".game-page");
+  const gamePage = document.querySelector(".game-page") as HTMLElement;
 
   const state = initGameState();
   //create block wor game words
   renderWrapperBlock(gamePage);
 
-  let words = await getQuantityOfWords(state.wordsQuantity);
+  const words = (await getQuantityOfWords(state.wordsQuantity)) as Word[];
 
   //add all words inputs
   updateGameWrapperBlock(words);
 }
 
-function restartGame() {
-  this.removeEventListener("click", restartGame);
+function restartGame(e: MouseEvent) {
+  const button = e.target as HTMLButtonElement;
+  button.removeEventListener("click", restartGame);
   removeGameWrapperBlock();
   startGame();
 }
 
-function handleAnswerButtonClick(e) {
-  const wordCheckBlock = e.target.closest(".game_block");
-  const enWord = wordCheckBlock.querySelector(".game_block-word").textContent;
-  let wordData = searchWord(enWord);
+function handleAnswerButtonClick(e: MouseEvent) {
+  const button = e.target as HTMLButtonElement;
+  const wordCheckBlock = button.closest(".game_block") as HTMLElement;
+  const enWord = wordCheckBlock.querySelector(
+    ".game_block-word",
+  ) as HTMLElement;
+  const enWordText = enWord.textContent as string;
+  const wordData = searchWord(enWordText) as Word;
 
-  const inputToCheck = wordCheckBlock.querySelector(".game_block-answer");
+  const inputToCheck = wordCheckBlock.querySelector(
+    ".game_block-answer",
+  ) as HTMLInputElement;
   const value = inputToCheck.value;
 
   if (value === wordData.ru) {
@@ -50,17 +58,18 @@ function handleAnswerButtonClick(e) {
     wordCheckBlock.style.background = `rgb(100,1,1)`;
   }
   inputToCheck.disabled = true;
-  e.target.disabled = true;
-  e.target.removeEventListener("click", handleAnswerButtonClick);
+  button.disabled = true;
+  button.removeEventListener("click", handleAnswerButtonClick);
 }
 
-async function handleGamePageClick(e) {
-  if (e.target.classList.contains("game-start-btn")) {
+async function handleGamePageClick(e: MouseEvent) {
+  const page = e.target as HTMLElement;
+  if (page.classList.contains("game-start-btn")) {
     await startGame();
   }
-  if (e.target.classList.contains("game_block-btn")) {
+  if (page.classList.contains("game_block-btn")) {
     handleAnswerButtonClick(e);
-    const wordBlock = e.target.closest(".game_block");
+    const wordBlock = page.closest(".game_block") as HTMLElement;
     if (wordBlock.dataset.answer === "true") {
       updateGameState("rightAnswers", 1);
     }
@@ -73,14 +82,16 @@ async function handleGamePageClick(e) {
     const gameState = getGameState();
     updateFinalWrapperBlock(gameState);
 
-    const endButton = document.querySelector(".game-btn_end");
+    const endButton = document.querySelector(
+      ".game-btn_end",
+    ) as HTMLButtonElement;
     endButton.addEventListener("click", restartGame);
   }
 }
 
-export async function runGamePage(state) {
+export async function runGamePage(state: GlobalState) {
   renderGamePage(renderState[state.source]);
 
-  const gamePage = document.querySelector(".game-page");
+  const gamePage = document.querySelector(".game-page") as HTMLButtonElement;
   gamePage.addEventListener("click", handleGamePageClick);
 }

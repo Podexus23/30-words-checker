@@ -8,10 +8,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build:ts": "tsc --watch",
-    "dev:ts": "nodemon dist/index.js",
-    "server:ts": "nodemon dist/server/app.server.js",
-    "start": "node src/server/server.js",
-    "dev": "nodemon src/server/server.js",
+    "start": "node dist/server/app.server.js",
+    "dev": "nodemon dist/server/app.server.js",
     "browser-sync": "browser-sync start --config bs-config.json",
     "dev:bs": "concurrently \"npm run dev\" \"npm run browser-sync\"",
     "test": "echo \"Error: no test specified\" && exit 1"

@@ -5,7 +5,7 @@ import { IDBWords, Word } from "./interface.db.js";
 
 const pathToDB = path.join(import.meta.dirname, "words.json");
 
-async function loadJSON(filePath: string) {
+async function loadJSON(filePath: string): Promise<IDBWords> {
   const fileContents = await fs.readFile(filePath, "utf-8");
   return JSON.parse(fileContents);
 }

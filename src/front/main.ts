@@ -1,15 +1,11 @@
-import { SourceType } from "./js/enum.front.js";
 import { runGamePage } from "./js/controller/gamePage.controller.js";
 import { runMainPage } from "./js/controller/mainPage.controller.js";
+import { SourceType } from "./js/enum.front.js";
+import { GlobalState } from "./js/interface.front.js";
 import { initInMemory } from "./js/model/wordsData.model.js";
 
-export const localAddress = {
-  src1: "WC_words",
-  src2: "WC_2024",
-};
-
-export const globalState = {
-  source: SourceType.Server,
+export const globalState: GlobalState = {
+  source: SourceType.IndexedDB,
 };
 
 await initInMemory(globalState);
