@@ -1,14 +1,11 @@
-import { renderState } from "../enum.front.js";
-import { GlobalState } from "../interface.front.js";
+import { renderState } from "../enum.front";
+import { GlobalState } from "../interface.front";
 import {
   addWord,
   getAllWords,
   updateRemoteData,
-} from "../model/wordsData.model.js";
-import {
-  addWordToWordsBlock,
-  renderMainPage,
-} from "../view/renderMain.view.js";
+} from "../model/wordsData.model";
+import { addWordToWordsBlock, renderMainPage } from "../view/renderMain.view";
 
 export async function handleSubmitAddWordForm(e: SubmitEvent) {
   e.preventDefault();

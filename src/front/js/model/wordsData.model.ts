@@ -1,6 +1,6 @@
-import { LocalAddress, SourceType } from "../enum.front.js";
-import { logError } from "../helpers/log.helper.js";
-import { GlobalState, IDBWords, JSONString, Word } from "../interface.front.js";
+import { LocalAddress, SourceType } from "../enum.front";
+import { logError } from "../helpers/log.helper";
+import { GlobalState, IDBWords, JSONString, Word } from "../interface.front";
 
 const WORDS: IDBWords = {
   cat: { en: "cat", ru: "кот" },

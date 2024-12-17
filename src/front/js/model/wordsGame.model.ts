@@ -1,4 +1,4 @@
-import { GameBasicSettings, GameState } from "../interface.front.js";
+import { GameBasicSettings, GameState } from "../interface.front";
 
 const gameState: GameState = {
   wordsQuantity: 5,

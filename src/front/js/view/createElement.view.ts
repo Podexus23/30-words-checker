@@ -4,7 +4,7 @@ import {
   InputOptions,
   LinkOptions,
   TagOptions,
-} from "../interface.front.js";
+} from "../interface.front";
 
 export function createInput({
   type = "text",

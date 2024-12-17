@@ -1,12 +1,12 @@
-import { renderState } from "../enum.front.js";
-import { GlobalState, Word } from "../interface.front.js";
-import { getQuantityOfWords, searchWord } from "../model/wordsData.model.js";
+import { renderState } from "../enum.front";
+import { GlobalState, Word } from "../interface.front";
+import { getQuantityOfWords, searchWord } from "../model/wordsData.model";
 import {
   checkEndGame,
   getGameState,
   initGameState,
   updateGameState,
-} from "../model/wordsGame.model.js";
+} from "../model/wordsGame.model";
 import {
   removeGameWrapperBlock,
   renderGamePage,
@@ -14,7 +14,7 @@ import {
   updateFinalWrapperBlock,
   updateGameWrapperBlock,
   updateStateBlock,
-} from "../view/renderGame.view.js";
+} from "../view/renderGame.view";
 
 async function startGame() {
   const gamePage = document.querySelector(".game-page") as HTMLElement;

@@ -1,11 +1,11 @@
-import { runGamePage } from "./js/controller/gamePage.controller.js";
-import { runMainPage } from "./js/controller/mainPage.controller.js";
-import { SourceType } from "./js/enum.front.js";
-import { GlobalState } from "./js/interface.front.js";
-import { initInMemory } from "./js/model/wordsData.model.js";
+import { runGamePage } from "./js/controller/gamePage.controller";
+import { runMainPage } from "./js/controller/mainPage.controller";
+import { SourceType } from "./js/enum.front";
+import { GlobalState } from "./js/interface.front";
+import { initInMemory } from "./js/model/wordsData.model";
 
 export const globalState: GlobalState = {
-  source: SourceType.IndexedDB,
+  source: SourceType.Local,
 };
 
 await initInMemory(globalState);

@@ -1,12 +1,13 @@
-import { PageRenderState } from "../enum.front.js";
-import { IDBWords } from "../interface.front.js";
+import assImg from "../../assets/jpg/cheecky-ass.jpg";
+import { PageRenderState } from "../enum.front";
+import { IDBWords } from "../interface.front";
 import {
   createForm,
   createImage,
   createInput,
   createLink,
   createTag,
-} from "./createElement.view.js";
+} from "./createElement.view";
 
 const isMainPage = document.querySelector(".main-page") as HTMLElement;
 
@@ -102,7 +103,7 @@ function renderFooterBlock() {
 
   const footerPic = createImage({
     className: "footer-img img",
-    src: "assets/jpg/cheecky-ass.jpg",
+    src: assImg,
     alt: "ass",
   });
 

@@ -1,6 +1,6 @@
-import { PageRenderState } from "../enum.front.js";
-import { Word } from "../interface.front.js";
-import { createInput, createLink, createTag } from "./createElement.view.js";
+import { PageRenderState } from "../enum.front";
+import { Word } from "../interface.front";
+import { createInput, createLink, createTag } from "./createElement.view";
 
 const gamePage = document.querySelector(".game-page") as HTMLElement;
 

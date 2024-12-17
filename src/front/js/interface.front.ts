@@ -1,4 +1,4 @@
-import { SourceType } from "./enum.front.js";
+import { SourceType } from "./enum.front";
 
 export interface GlobalState {
   source: SourceType;
