@@ -31,7 +31,7 @@ const server = http.createServer(async (req, res) => {
       }
 
       if (req.url === "/game") {
-        await respondFrontFiles(res, "pages/game.html");
+        await respondFrontFiles(res, "game.html");
         return;
       }
 

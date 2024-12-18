@@ -5,7 +5,7 @@ import { GlobalState } from "./js/interface.front";
 import { initInMemory } from "./js/model/wordsData.model";
 
 export const globalState: GlobalState = {
-  source: SourceType.Local,
+  source: SourceType.Server,
 };
 
 await initInMemory(globalState);

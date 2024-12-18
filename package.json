@@ -7,14 +7,13 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "build:ts": "tsc --watch",
+    "build:ts": "tsc",
+    "build:ts-watch": "tsc --watch",
     "start": "node dist/server/app.server.js",
     "dev": "nodemon dist/server/app.server.js",
-    "browser-sync": "browser-sync start --config bs-config.json",
-    "dev:bs": "concurrently \"npm run dev\" \"npm run browser-sync\"",
+    "build": "concurrently \"npm run build:ts\" \"npm run build:w\"",
     "build:w": "webpack --mode production",
-    "start:w": "webpack serve --mode development --open",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:w": "webpack serve --mode development --open"
   },
   "repository": {
     "type": "git",

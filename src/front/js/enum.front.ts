@@ -21,15 +21,15 @@ export const renderState = {
     toGamePageLink: "/game",
   },
   local: {
-    toMainPageLink: "../index.html",
+    toMainPageLink: "./index.html",
     toGamePageLink: "./game.html",
   },
   indexedDB: {
-    toMainPageLink: "../index.html",
+    toMainPageLink: "./index.html",
     toGamePageLink: "./game.html",
   },
   test: {
-    toMainPageLink: "../index.html",
+    toMainPageLink: "./index.html",
     toGamePageLink: "./game.html",
   },
 } as const;

@@ -3,11 +3,10 @@ import HtmlWebpackPlugin from "html-webpack-plugin";
 import CopyWebpackPlugin from "copy-webpack-plugin";
 
 export default {
-  mode: "development",
   entry: "./src/front/main.ts",
   output: {
     filename: "bundle.js",
-    path: path.resolve("dist"),
+    path: path.resolve("dist", "front"),
   },
   resolve: {
     extensions: [".ts", ".js"],
@@ -39,7 +38,7 @@ export default {
       template: "./src/front/index.html",
     }),
     new HtmlWebpackPlugin({
-      template: "./src/front/pages/game.html", // Another HTML template
+      template: "./src/front/pages/game.html",
       filename: "game.html", // Output filename
     }),
     new CopyWebpackPlugin({
