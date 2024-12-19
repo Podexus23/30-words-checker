@@ -1,3 +1,4 @@
+import "./style.css";
 import { runGamePage } from "./js/controller/gamePage.controller.js";
 import { runMainPage } from "./js/controller/mainPage.controller.js";
 import { SourceType } from "./js/enum.front.js";
@@ -5,7 +6,7 @@ import { GlobalState } from "./js/interface.front.js";
 import { initInMemory } from "./js/model/wordsData.model.js";
 
 export const globalState: GlobalState = {
-  source: SourceType.IndexedDB,
+  source: SourceType.Local,
 };
 
 await initInMemory(globalState);

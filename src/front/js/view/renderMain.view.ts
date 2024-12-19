@@ -1,3 +1,4 @@
+import ImgPath from "../../assets/jpg/cheecky-ass.jpg";
 import { PageRenderState } from "../enum.front.js";
 import { IDBWords } from "../interface.front.js";
 import {
@@ -102,7 +103,7 @@ function renderFooterBlock() {
 
   const footerPic = createImage({
     className: "footer-img img",
-    src: "assets/jpg/cheecky-ass.jpg",
+    src: ImgPath,
     alt: "ass",
   });
 

@@ -108,6 +108,6 @@
     // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
-  "include": ["src/**/*"], // Include all files in the src folder
-  "exclude": ["node_modules"]
+  "include": ["src/**/*", "src/**/*.json"], // Include all files in the src folder
+  "exclude": ["node_modules", "src/front/**/*"]
 }

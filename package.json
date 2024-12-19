@@ -5,11 +5,14 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "build:ts": "tsc --watch",
-    "start": "node dist/server/app.server.js",
-    "dev": "nodemon dist/server/app.server.js",
+    "start:dist": "node dist/server/app.server.js",
+    "dev:dist": "nodemon dist/server/app.server.js",
     "browser-sync": "browser-sync start --config bs-config.json",
     "dev:bs": "concurrently \"npm run dev\" \"npm run browser-sync\"",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -38,6 +41,7 @@
     "nodemon": "^3.1.7",
     "prettier": "^3.4.2",
     "typescript": "^5.7.2",
-    "typescript-eslint": "^8.18.0"
+    "typescript-eslint": "^8.18.0",
+    "vite": "^6.0.3"
   }
 }
