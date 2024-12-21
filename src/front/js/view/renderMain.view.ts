@@ -8,7 +8,7 @@ import {
   createTag,
 } from "./createElement.view.js";
 
-const isMainPage = document.querySelector(".main-page") as HTMLElement;
+const isMainPage = document.getElementById("root") as HTMLElement;
 
 function renderHeadBlock(state: PageRenderState) {
   const header = createTag({ tagName: "header", className: "header" });

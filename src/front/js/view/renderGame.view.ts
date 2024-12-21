@@ -2,7 +2,7 @@ import { PageRenderState } from "../enum.front.js";
 import { Word } from "../interface.front.js";
 import { createInput, createLink, createTag } from "./createElement.view.js";
 
-const gamePage = document.querySelector(".game-page") as HTMLElement;
+const gamePage = document.getElementById("root") as HTMLElement;
 
 export function createWordBlock(wordData: Word) {
   const wordCheckBlock = createTag({ tagName: "div", className: "game_block" });

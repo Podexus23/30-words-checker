@@ -17,7 +17,7 @@ import {
 } from "../view/renderGame.view.js";
 
 async function startGame() {
-  const gamePage = document.querySelector(".game-page") as HTMLElement;
+  const gamePage = document.getElementById("root") as HTMLElement;
 
   const state = initGameState();
   //create block wor game words
