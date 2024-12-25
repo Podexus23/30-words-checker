@@ -16,7 +16,10 @@ const routes: Record<string, RouteHandler> = {
     if (mainPage) removeMainPage();
     runGamePage(state);
   },
-  // "/404": () => `<h1>404 Page not found</h1>`,
+  "/404": () => {
+    const root = document.getElementById("root") as HTMLElement;
+    root.innerHTML = `<h1>404 Page not found</h1>`;
+  },
 };
 
 export function renderPage(path: string) {
@@ -24,6 +27,8 @@ export function renderPage(path: string) {
     routes[path](globalState);
   } else if (path === "/") {
     routes[path](globalState);
+  } else {
+    routes["/404"](globalState);
   }
 }
 
