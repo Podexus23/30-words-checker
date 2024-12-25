@@ -8,9 +8,9 @@ import {
   createTag,
 } from "./createElement.view.js";
 
-const isMainPage = document.getElementById("root") as HTMLElement;
+const rootBlock = document.getElementById("root") as HTMLElement;
 
-function renderHeadBlock(state: PageRenderState) {
+function renderHeadBlock(state: PageRenderState, mainBlock: HTMLElement) {
   const header = createTag({ tagName: "header", className: "header" });
   const heading = createTag({
     tagName: "h1",
@@ -28,13 +28,13 @@ function renderHeadBlock(state: PageRenderState) {
     textContent: "hello neighbor",
   });
 
-  isMainPage.append(header);
+  mainBlock.append(header);
   header.append(heading);
   header.append(subHeading);
   header.append(gamePageLink);
 }
 
-function renderMainBlock() {
+function renderMainBlock(mainBlock: HTMLElement) {
   const main = createTag({ tagName: "main", className: "main" });
   const addWordForm = createForm({
     action: "/api/word",
@@ -75,7 +75,7 @@ function renderMainBlock() {
   }) as HTMLButtonElement;
   submitBtn.type = "submit";
 
-  isMainPage.append(main);
+  mainBlock.append(main);
   main.append(addWordForm);
   addWordForm.append(fieldAddWord);
   fieldAddWord.append(fieldLegend);
@@ -84,7 +84,7 @@ function renderMainBlock() {
   fieldAddWord.append(submitBtn);
 }
 
-function renderFooterBlock() {
+function renderFooterBlock(mainBlock: HTMLElement) {
   const footer = createTag({ tagName: "footer", className: "footer" });
 
   const wordsBlock = createTag({
@@ -106,7 +106,7 @@ function renderFooterBlock() {
     alt: "ass",
   });
 
-  isMainPage.append(footer);
+  mainBlock.append(footer);
   footer.append(wordsBlock);
   wordsBlock.append(showWordsBtn);
   wordsBlock.append(allWordsBlock);
@@ -125,10 +125,12 @@ export function addWordToWordsBlock(word: string, data: IDBWords) {
 }
 
 export function renderMainPage(state: PageRenderState) {
+  const isMainPage = createTag({ tagName: "div", className: "main-page" });
+  rootBlock.append(isMainPage);
   //HEADER
-  renderHeadBlock(state);
+  renderHeadBlock(state, isMainPage);
   //MAIN
-  renderMainBlock();
+  renderMainBlock(isMainPage);
   //FOOTER
-  renderFooterBlock();
+  renderFooterBlock(isMainPage);
 }

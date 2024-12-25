@@ -1,33 +1,16 @@
-import { runGamePage } from "./js/controller/gamePage.controller.js";
-import { runMainPage } from "./js/controller/mainPage.controller.js";
+import { renderPage } from "./js/controller/router.js";
 import { SourceType } from "./js/enum.front.js";
 import { GlobalState } from "./js/interface.front.js";
 import { initInMemory } from "./js/model/wordsData.model.js";
-import { createTag } from "./js/view/createElement.view.js";
 
 export const globalState: GlobalState = {
-  source: SourceType.IndexedDB,
+  source: SourceType.Server,
 };
 
-const routes = {
-  "/": () => runMainPage(globalState),
-  "/game": () => runGamePage(globalState),
-};
+const urlPath = window.location.pathname;
 
+// all words state
 await initInMemory(globalState);
-const rootBlock = createTag({ tagName: "div", className: "root" });
-rootBlock.id = "root";
-document.body.append(rootBlock);
 
-//ADD WORD FORM
-const isMainPage = document.querySelector(".main-page");
-if (isMainPage) {
-  runMainPage(globalState);
-}
-
-// GAME
-
-const isGamePage = document.querySelector(".game-page");
-if (isGamePage) {
-  runGamePage(globalState);
-}
+// router/render state
+renderPage(urlPath);

@@ -9,6 +9,7 @@ import {
   addWordToWordsBlock,
   renderMainPage,
 } from "../view/renderMain.view.js";
+import { renderPage } from "./router.js";
 
 export async function handleSubmitAddWordForm(e: SubmitEvent) {
   e.preventDefault();
@@ -39,6 +40,20 @@ export function runMainPage(state: GlobalState) {
     ".words_get-btn",
   ) as HTMLButtonElement;
 
+  const gamePageLink = document.querySelector(
+    ".header_game-link",
+  ) as HTMLAnchorElement;
+
+  gamePageLink.addEventListener("click", (e: MouseEvent) => {
+    e.preventDefault();
+    const arch = e.target as HTMLAnchorElement;
+    const path = arch.getAttribute("href") as string;
+    history.pushState({}, "", path);
+    console.log(`hi`);
+    renderPage(path);
+  });
   addWordForm.addEventListener("submit", handleSubmitAddWordForm);
   getWordsBtn.addEventListener("click", handleGetWordsButton);
 }
+
+export function removeMainPage() {}
