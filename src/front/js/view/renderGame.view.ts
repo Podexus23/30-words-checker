@@ -2,7 +2,7 @@ import { PageRenderState } from "../enum.front.js";
 import { Word } from "../interface.front.js";
 import { createInput, createLink, createTag } from "./createElement.view.js";
 
-const gamePage = document.getElementById("root") as HTMLElement;
+const rootBlock = document.getElementById("root") as HTMLElement;
 
 export function createWordBlock(wordData: Word) {
   const wordCheckBlock = createTag({ tagName: "div", className: "game_block" });
@@ -44,7 +44,7 @@ export function updateStateBlock(number: number, countTo: number) {
   counterBlock.textContent = `${number} / ${countTo}`;
 }
 
-function renderAsideBlock() {
+function renderAsideBlock(mainBlock: HTMLElement) {
   const aside = createTag({ tagName: "aside", className: "aside" });
   const optionsBlock = createTag({ tagName: "div", className: "game-options" });
   const srcOptionsBlock = createTag({ tagName: "div", className: "game-src" });
@@ -62,14 +62,14 @@ function renderAsideBlock() {
   });
   localButton.dataset.src = "storage";
 
-  gamePage.append(aside);
+  mainBlock.append(aside);
   aside.append(optionsBlock);
   optionsBlock.append(srcOptionsBlock);
   srcOptionsBlock.append(serverButton);
   srcOptionsBlock.append(localButton);
 }
 
-function renderHeaderBlock(state: PageRenderState) {
+function renderHeaderBlock(state: PageRenderState, mainBlock: HTMLElement) {
   const header = createTag({ tagName: "header", className: "header" });
   const heading = createTag({
     tagName: "h1",
@@ -83,12 +83,12 @@ function renderHeaderBlock(state: PageRenderState) {
     className: "main-link link",
   });
 
-  gamePage.append(header);
+  mainBlock.append(header);
   header.append(heading);
   header.append(mainLink);
 }
 
-function renderMainBlock() {
+function renderMainBlock(mainBlock: HTMLElement) {
   const main = createTag({ tagName: "main", className: "game-main" });
   const startButton = createTag({
     tagName: "button",
@@ -96,17 +96,19 @@ function renderMainBlock() {
     textContent: "Start Game",
   });
 
-  gamePage.append(main);
+  mainBlock.append(main);
   main.append(startButton);
 }
 
 export function renderGamePage(state: PageRenderState) {
+  const gamePage = createTag({ tagName: "div", className: "game-page" });
+  rootBlock.append(gamePage);
   // ASIDE
-  renderAsideBlock();
+  renderAsideBlock(gamePage);
   // HEADER
-  renderHeaderBlock(state);
+  renderHeaderBlock(state, gamePage);
   // MAIN
-  renderMainBlock();
+  renderMainBlock(gamePage);
 }
 
 export function renderWrapperBlock(parentNode: HTMLElement) {

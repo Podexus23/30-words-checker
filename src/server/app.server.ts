@@ -11,6 +11,8 @@ const PORT = 3000;
 const server = http.createServer(async (req, res) => {
   try {
     // GET METHOD
+    console.log(`${req.url}`);
+
     if (req.method === "GET" && req.url) {
       const parsedUrl = parse(req.url, true);
       const ext = extname(req.url);
@@ -25,13 +27,8 @@ const server = http.createServer(async (req, res) => {
         return;
       }
 
-      if (req.url === "/") {
+      if (req.url === "/" || req.url === "/game") {
         await respondFrontFiles(res, "index.html");
-        return;
-      }
-
-      if (req.url === "/game") {
-        await respondFrontFiles(res, "pages/game.html");
         return;
       }
 

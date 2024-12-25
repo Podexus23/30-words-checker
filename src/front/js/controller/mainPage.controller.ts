@@ -27,12 +27,17 @@ export async function handleGetWordsButton() {
   Object.keys(data).forEach((word) => addWordToWordsBlock(word, data));
 }
 
+function handleLinkToPage(e: MouseEvent) {
+  e.preventDefault();
+  const arch = e.target as HTMLAnchorElement;
+  const path = arch.getAttribute("href") as string;
+  history.pushState({}, "", path);
+  renderPage(path);
+}
+
 export function runMainPage(state: GlobalState) {
   //render main page and add all listeners
   renderMainPage(renderState[state.source]);
-  window.addEventListener("beforeunload", () => {
-    updateRemoteData(state);
-  });
   const addWordForm = document.querySelector(
     ".add-word-form",
   ) as HTMLFormElement;
@@ -44,16 +49,27 @@ export function runMainPage(state: GlobalState) {
     ".header_game-link",
   ) as HTMLAnchorElement;
 
-  gamePageLink.addEventListener("click", (e: MouseEvent) => {
-    e.preventDefault();
-    const arch = e.target as HTMLAnchorElement;
-    const path = arch.getAttribute("href") as string;
-    history.pushState({}, "", path);
-    console.log(`hi`);
-    renderPage(path);
-  });
+  window.addEventListener("beforeunload", updateRemoteData);
+  gamePageLink.addEventListener("click", handleLinkToPage);
   addWordForm.addEventListener("submit", handleSubmitAddWordForm);
   getWordsBtn.addEventListener("click", handleGetWordsButton);
 }
 
-export function removeMainPage() {}
+export function removeMainPage() {
+  const mainPage = document.querySelector(".main-page") as HTMLElement;
+  const addWordForm = document.querySelector(
+    ".add-word-form",
+  ) as HTMLFormElement;
+  const getWordsBtn = document.querySelector(
+    ".words_get-btn",
+  ) as HTMLButtonElement;
+  const gamePageLink = document.querySelector(
+    ".header_game-link",
+  ) as HTMLAnchorElement;
+
+  gamePageLink.removeEventListener("click", handleLinkToPage);
+  addWordForm.removeEventListener("submit", handleSubmitAddWordForm);
+  getWordsBtn.removeEventListener("click", handleGetWordsButton);
+  window.removeEventListener("beforeunload", updateRemoteData);
+  mainPage.remove();
+}

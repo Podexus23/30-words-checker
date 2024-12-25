@@ -125,12 +125,12 @@ export function addWordToWordsBlock(word: string, data: IDBWords) {
 }
 
 export function renderMainPage(state: PageRenderState) {
-  const isMainPage = createTag({ tagName: "div", className: "main-page" });
-  rootBlock.append(isMainPage);
+  const mainPage = createTag({ tagName: "div", className: "main-page" });
+  rootBlock.append(mainPage);
   //HEADER
-  renderHeadBlock(state, isMainPage);
+  renderHeadBlock(state, mainPage);
   //MAIN
-  renderMainBlock(isMainPage);
+  renderMainBlock(mainPage);
   //FOOTER
-  renderFooterBlock(isMainPage);
+  renderFooterBlock(mainPage);
 }

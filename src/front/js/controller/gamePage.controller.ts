@@ -15,12 +15,13 @@ import {
   updateGameWrapperBlock,
   updateStateBlock,
 } from "../view/renderGame.view.js";
+import { renderPage } from "./router.js";
 
 async function startGame() {
-  const gamePage = document.getElementById("root") as HTMLElement;
+  const gamePage = document.querySelector(".game-page") as HTMLElement;
 
   const state = initGameState();
-  //create block wor game words
+  //create block for game words
   renderWrapperBlock(gamePage);
 
   const words = (await getQuantityOfWords(state.wordsQuantity)) as Word[];
@@ -64,6 +65,7 @@ function handleAnswerButtonClick(e: MouseEvent) {
 
 async function handleGamePageClick(e: MouseEvent) {
   const page = e.target as HTMLElement;
+
   if (page.classList.contains("game-start-btn")) {
     await startGame();
   }
@@ -89,9 +91,34 @@ async function handleGamePageClick(e: MouseEvent) {
   }
 }
 
+function handleLinkToPage(e: MouseEvent) {
+  e.preventDefault();
+  const arch = e.target as HTMLAnchorElement;
+  const path = arch.getAttribute("href") as string;
+  history.pushState({}, "", path);
+  renderPage(path);
+}
+
 export async function runGamePage(state: GlobalState) {
   renderGamePage(renderState[state.source]);
+  const gamePage = document.querySelector(".game-page") as HTMLElement;
+  const mainPageLink = document.querySelector(
+    ".main-link",
+  ) as HTMLAnchorElement;
 
-  const gamePage = document.querySelector(".game-page") as HTMLButtonElement;
+  mainPageLink.addEventListener("click", handleLinkToPage);
   gamePage.addEventListener("click", handleGamePageClick);
+}
+
+//!somehow should remove all listeners on answers if there is open ones
+export function removeGamePage() {
+  const gamePage = document.querySelector(".game-page") as HTMLButtonElement;
+
+  const mainPageLink = document.querySelector(
+    ".main-link",
+  ) as HTMLAnchorElement;
+
+  mainPageLink.removeEventListener("click", handleLinkToPage);
+  gamePage.removeEventListener("click", handleGamePageClick);
+  gamePage.remove();
 }

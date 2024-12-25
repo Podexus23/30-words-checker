@@ -1,3 +1,4 @@
+import { globalState } from "../../main.js";
 import { LocalAddress, SourceType } from "../enum.front.js";
 import { logError } from "../helpers/log.helper.js";
 import { GlobalState, IDBWords, JSONString, Word } from "../interface.front.js";
@@ -176,7 +177,8 @@ async function updateIndexedDBData(data: IDBWords) {
   };
 }
 
-export async function updateRemoteData(state: GlobalState) {
+export async function updateRemoteData() {
+  const state = globalState;
   switch (state.source) {
     case SourceType.Server: {
       const data = JSON.stringify(inMemoryWords);
