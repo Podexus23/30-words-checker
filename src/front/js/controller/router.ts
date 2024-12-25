@@ -26,3 +26,7 @@ export function renderPage(path: string) {
     routes[path](globalState);
   }
 }
+
+window.addEventListener("popstate", () => {
+  renderPage(window.location.pathname);
+});
