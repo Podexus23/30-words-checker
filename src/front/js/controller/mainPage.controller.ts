@@ -9,18 +9,27 @@ import {
   addWordToWordsBlock,
   renderMainPage,
 } from "../view/renderMain.view.js";
-import { checkEnWordValidation } from "./helper.controller.js";
+import {
+  checkEnWordValidation,
+  checkRuWordValidation,
+} from "./helper.controller.js";
 import { renderPage } from "./router.js";
 
 export async function handleSubmitAddWordForm(e: SubmitEvent) {
   e.preventDefault();
   const form = e.target as HTMLFormElement;
-  const data = new FormData(form);
-  const wordToSend = JSON.stringify(
-    Object.fromEntries(Array.from(data.entries())),
-  );
-  form.reset();
-  addWord(wordToSend);
+
+  if (!form.checkValidity()) {
+    //! сделать вывод сообщений ... под формой
+    console.log(`sotty bro sthm went wrong`);
+  } else {
+    const data = new FormData(form);
+    const wordToSend = JSON.stringify(
+      Object.fromEntries(Array.from(data.entries())),
+    );
+    form.reset();
+    addWord(wordToSend);
+  }
 }
 
 export async function handleGetWordsButton() {
@@ -36,6 +45,27 @@ function handleLinkToPage(e: MouseEvent) {
   renderPage(path);
 }
 
+function handleEnInputValidation(e: Event) {
+  const input = e.target as HTMLInputElement;
+  if (!checkEnWordValidation(input.value) && input.value !== "") {
+    input.setCustomValidity("Only English letters are allowed.");
+    input.classList.add("invalid");
+  } else {
+    input.setCustomValidity(""); // Clear the error
+    input.classList.remove("invalid");
+  }
+}
+function handleRuInputValidation(e: Event) {
+  const input = e.target as HTMLInputElement;
+  if (!checkRuWordValidation(input.value) && input.value !== "") {
+    input.setCustomValidity("Only Russian letters are allowed.");
+    input.classList.add("invalid");
+  } else {
+    input.setCustomValidity(""); // Clear the error
+    input.classList.remove("invalid");
+  }
+}
+
 export function runMainPage(state: GlobalState) {
   //render main page and add all listeners
   renderMainPage(renderState[state.source]);
@@ -49,20 +79,10 @@ export function runMainPage(state: GlobalState) {
     ".header_game-link",
   ) as HTMLAnchorElement;
   const enWordInput = document.querySelector("#en_word") as HTMLInputElement;
+  const ruWordInput = document.querySelector("#ru_word") as HTMLInputElement;
 
-  enWordInput.addEventListener("input", (e) => {
-    e.preventDefault();
-    const input = e.target as HTMLInputElement;
-    if (!checkEnWordValidation(input.value)) {
-      input.setCustomValidity("Only English letters are allowed.");
-      input.classList.add("invalid");
-      console.log(`hi valid`);
-    } else {
-      input.setCustomValidity(""); // Clear the error
-      input.classList.remove("invalid");
-    }
-    console.log(input.value);
-  });
+  enWordInput.addEventListener("input", handleEnInputValidation);
+  ruWordInput.addEventListener("input", handleRuInputValidation);
 
   window.addEventListener("beforeunload", updateRemoteData);
   gamePageLink.addEventListener("click", handleLinkToPage);
