@@ -9,6 +9,7 @@ import {
   addWordToWordsBlock,
   renderMainPage,
 } from "../view/renderMain.view.js";
+import { checkEnWordValidation } from "./helper.controller.js";
 import { renderPage } from "./router.js";
 
 export async function handleSubmitAddWordForm(e: SubmitEvent) {
@@ -44,10 +45,24 @@ export function runMainPage(state: GlobalState) {
   const getWordsBtn = document.querySelector(
     ".words_get-btn",
   ) as HTMLButtonElement;
-
   const gamePageLink = document.querySelector(
     ".header_game-link",
   ) as HTMLAnchorElement;
+  const enWordInput = document.querySelector("#en_word") as HTMLInputElement;
+
+  enWordInput.addEventListener("input", (e) => {
+    e.preventDefault();
+    const input = e.target as HTMLInputElement;
+    if (!checkEnWordValidation(input.value)) {
+      input.setCustomValidity("Only English letters are allowed.");
+      input.classList.add("invalid");
+      console.log(`hi valid`);
+    } else {
+      input.setCustomValidity(""); // Clear the error
+      input.classList.remove("invalid");
+    }
+    console.log(input.value);
+  });
 
   window.addEventListener("beforeunload", updateRemoteData);
   gamePageLink.addEventListener("click", handleLinkToPage);
