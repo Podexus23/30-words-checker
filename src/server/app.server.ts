@@ -5,7 +5,7 @@ import { addWord, addWords, getWords } from "../db/api.db.js";
 import { respondFrontFiles, respondJSON } from "./helpers.server.js";
 import { IDBWords, statusCode, Word } from "./interface.server.js";
 import { logServerError } from "../helpers/log.helper.js";
-import { validateWordObj } from "./validation.server.js";
+import { validateWordObj, validateWordsData } from "./validation.server.js";
 
 const PORT = 3000;
 
@@ -47,6 +47,7 @@ const server = http.createServer(async (req, res) => {
         return;
       }
       respondJSON(res, 404, "Hello, there is no such page, so ... 404");
+      return;
     }
 
     //API
@@ -80,10 +81,7 @@ const server = http.createServer(async (req, res) => {
             respondJSON(res, 201, `DB: Word "${dataToDB.en}" added`);
           else respondJSON(res, 500, "Unhandled server Error");
         });
-
-        req.on("error", (err) => {
-          logServerError(err, res);
-        });
+        return;
       }
 
       if (req.url === "/api/words") {
@@ -93,10 +91,23 @@ const server = http.createServer(async (req, res) => {
 
         req.on("end", () => {
           const parsedBody: IDBWords = JSON.parse(body);
-          addWords(parsedBody);
+
+          if (!validateWordsData(parsedBody)) {
+            respondJSON(
+              res,
+              400,
+              "Validation: Empty value or wrong letters for chosen language",
+            );
+            return;
+          }
+
+          const statusCode = addWords(parsedBody) as statusCode;
+          if (statusCode === 201) respondJSON(res, 201, `DB: Words added`);
+          else respondJSON(res, 500, "Unhandled server Error");
         });
-        respondJSON(res, 404, "Hello, there is no such page, so ... 404");
+        return;
       }
+      respondJSON(res, 404, "Hello, there is no such page, so ... 404");
     }
   } catch (error: unknown) {
     logServerError(error, res);

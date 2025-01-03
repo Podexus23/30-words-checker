@@ -5,12 +5,16 @@ import { IDBWords, Word } from "./interface.db.js";
 
 const pathToDB = path.join(import.meta.dirname, "words.json");
 
-async function loadJSON(filePath: string): Promise<IDBWords> {
-  const fileContents = await fs.readFile(filePath, "utf-8");
-  return JSON.parse(fileContents);
+async function loadJSON(filePath: string): Promise<IDBWords | undefined> {
+  try {
+    const fileContents = await fs.readFile(filePath, "utf-8");
+    return JSON.parse(fileContents);
+  } catch (err: unknown) {
+    logError(err);
+  }
 }
 
-const db: IDBWords = await loadJSON(pathToDB);
+const db: IDBWords = (await loadJSON(pathToDB)) || {};
 const inMemoryDB: IDBWords = db;
 
 const updateJson = async () => {
@@ -30,7 +34,6 @@ export const getWords = (): IDBWords => inMemoryDB;
 
 export const addWord = (wordData: Word): number | undefined => {
   if (searchWord(wordData.en)) return 409;
-  console.log("addWord: added");
   try {
     inMemoryDB[wordData.en] = { en: wordData.en, ru: wordData.ru };
     updateJson();
@@ -45,7 +48,6 @@ export const addWords = (wordsData: IDBWords): number | undefined => {
     Object.keys(wordsData).forEach((word: string) => {
       addWord(wordsData[word]);
     });
-    updateJson();
     return 201;
   } catch (err: unknown) {
     logError(err);
