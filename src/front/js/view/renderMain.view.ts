@@ -113,6 +113,11 @@ function renderFooterBlock(mainBlock: HTMLElement) {
   footer.append(footerPic);
 }
 
+export function cleanAllWordsBlock() {
+  const allWordsBlock = document.querySelector(".words_all") as HTMLElement;
+  allWordsBlock.innerHTML = "";
+}
+
 export function addWordToWordsBlock(word: string, data: IDBWords) {
   const wordBlock = createTag({
     tagName: "div",

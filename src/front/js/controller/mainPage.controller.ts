@@ -7,6 +7,7 @@ import {
 } from "../model/wordsData.model.js";
 import {
   addWordToWordsBlock,
+  cleanAllWordsBlock,
   createValidationMessage,
   removeValidationMessage,
   renderMainPage,
@@ -45,6 +46,7 @@ export async function handleSubmitAddWordForm(e: SubmitEvent) {
 
 export async function handleGetWordsButton() {
   const data = getAllWords();
+  cleanAllWordsBlock();
   Object.keys(data).forEach((word) => addWordToWordsBlock(word, data));
 }
 
