@@ -50,7 +50,7 @@ export function createForm({
   method = "GET",
   autocomplete = "off",
   name = "form",
-  className = "from",
+  className = "form",
 }: FormTagOptions): HTMLFormElement {
   const form = document.createElement("form");
   form.action = action;

@@ -35,6 +35,10 @@ async function startGame() {
   updateGameWrapperBlock(words);
 }
 
+function preventFunc(e: Event) {
+  e.preventDefault();
+}
+
 function restartGame(e: MouseEvent) {
   const button = e.target as HTMLButtonElement;
   button.removeEventListener("click", restartGame);
@@ -44,35 +48,36 @@ function restartGame(e: MouseEvent) {
 
 function handleAnswerButtonClick(e: MouseEvent) {
   const button = e.target as HTMLButtonElement;
-  const wordCheckBlock = button.closest(".game_block") as HTMLElement;
-  const enWord = wordCheckBlock.querySelector(
-    ".game_block-word",
-  ) as HTMLElement;
-  const enWordText = enWord.textContent as string;
+  //get form and remove action move from submit event from it
+  const wordCheckForm = button.closest(".form_word") as HTMLElement;
+  wordCheckForm.addEventListener("submit", preventFunc);
 
-  const wordData = searchWord(enWordText) as Word;
+  const enWord = wordCheckForm.querySelector(".game_block-word")
+    ?.textContent as string;
+  const wordData = searchWord(enWord) as Word;
 
-  const inputToCheck = wordCheckBlock.querySelector(
+  const inputToCheck = wordCheckForm.querySelector(
     ".game_block-answer",
   ) as HTMLInputElement;
   const value = inputToCheck.value;
   if (!checkRuWordValidation(value) || value == "") {
-    removeValidationMessage(wordCheckBlock);
+    removeValidationMessage(wordCheckForm);
     createValidationMessage(
-      wordCheckBlock,
+      wordCheckForm,
       "Input must be filled or use russian letters",
     );
     return false;
   }
 
   if (value === wordData.ru) {
-    wordCheckBlock.dataset.answer = "true";
-    wordCheckBlock.style.background = `rgb(10,150,50)`;
+    wordCheckForm.dataset.answer = "true";
+    wordCheckForm.style.background = `rgb(10,150,50)`;
   } else {
-    wordCheckBlock.dataset.answer = "false";
-    wordCheckBlock.style.background = `rgb(100,1,1)`;
+    wordCheckForm.dataset.answer = "false";
+    wordCheckForm.style.background = `rgb(100,1,1)`;
   }
-  removeValidationMessage(wordCheckBlock);
+
+  removeValidationMessage(wordCheckForm);
   inputToCheck.disabled = true;
   button.disabled = true;
   button.removeEventListener("click", handleAnswerButtonClick);
@@ -85,11 +90,12 @@ async function handleGamePageClick(e: MouseEvent) {
   if (page.classList.contains("game-start-btn")) {
     await startGame();
   } else if (page.classList.contains("game_block-btn")) {
+    //if there is wrong validation, prevent click to count to the game state
     if (!handleAnswerButtonClick(e)) return;
-    const wordBlock = page.closest(".game_block") as HTMLElement;
-    if (wordBlock.dataset.answer === "true") {
-      updateGameState("rightAnswers", 1);
-    }
+
+    const wordBlock = page.closest(".form_word") as HTMLElement;
+
+    if (wordBlock.dataset.answer === "true") updateGameState("rightAnswers", 1);
     updateGameState("playerMoves", 1);
 
     const gameState = getGameState();
@@ -125,14 +131,17 @@ export async function runGamePage(state: GlobalState) {
   gamePage.addEventListener("click", handleGamePageClick);
 }
 
-//!somehow should remove all listeners on answers if there is open ones
+//!somehow should remove all listeners on answers if there is open ones(like on change page or smth)
 export function removeGamePage() {
   const gamePage = document.querySelector(".game-page") as HTMLButtonElement;
 
   const mainPageLink = document.querySelector(
     ".main-link",
   ) as HTMLAnchorElement;
-
+  const gameForms = document.querySelectorAll(".form_word");
+  gameForms.forEach((form) => {
+    form.removeEventListener("submit", preventFunc);
+  });
   mainPageLink.removeEventListener("click", handleLinkToPage);
   gamePage.removeEventListener("click", handleGamePageClick);
   gamePage.remove();

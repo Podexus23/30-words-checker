@@ -1,22 +1,36 @@
 import { PageRenderState } from "../enum.front.js";
 import { Word } from "../interface.front.js";
-import { createInput, createLink, createTag } from "./createElement.view.js";
+import {
+  createForm,
+  createInput,
+  createLink,
+  createTag,
+} from "./createElement.view.js";
 
 const rootBlock = document.getElementById("root") as HTMLElement;
 
 export function createWordBlock(wordData: Word) {
-  const wordCheckBlock = createTag({ tagName: "div", className: "game_block" });
+  const wordCheckBlock = createForm({
+    autocomplete: "off",
+    name: `word-${wordData.en}`,
+    className: `form_word form_word-${wordData.en}`,
+    action: "",
+  });
 
-  const enWordDiv = createTag({
-    tagName: "div",
+  const enWordLabel = createTag({
+    tagName: "label",
     className: "game_block-word",
     textContent: wordData.en,
-  });
+  }) as HTMLLabelElement;
+
+  enWordLabel.setAttribute("for", `word-${wordData.en}`);
 
   const ruWordInput = createInput({
     type: "text",
     className: "game_block-answer",
   });
+
+  ruWordInput.id = `word-${wordData.en}`;
 
   const answerButton = createTag({
     tagName: "button",
@@ -24,7 +38,7 @@ export function createWordBlock(wordData: Word) {
     textContent: "Ok",
   });
 
-  wordCheckBlock.append(enWordDiv);
+  wordCheckBlock.append(enWordLabel);
   wordCheckBlock.append(ruWordInput);
   wordCheckBlock.append(answerButton);
 
