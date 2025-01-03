@@ -134,3 +134,17 @@ export function renderMainPage(state: PageRenderState) {
   //FOOTER
   renderFooterBlock(mainPage);
 }
+
+export function createFormMessage(
+  form: HTMLFormElement,
+  msg: string,
+  color = "red",
+) {
+  const msgBlock = createTag({
+    tagName: "div",
+    className: "form-message",
+    textContent: msg,
+  });
+  msgBlock.style.color = color;
+  form.append(msgBlock);
+}

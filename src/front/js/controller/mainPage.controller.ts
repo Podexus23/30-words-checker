@@ -7,9 +7,11 @@ import {
 } from "../model/wordsData.model.js";
 import {
   addWordToWordsBlock,
+  createFormMessage,
   renderMainPage,
 } from "../view/renderMain.view.js";
 import {
+  checkEmptyInputs,
   checkEnWordValidation,
   checkRuWordValidation,
 } from "./helper.controller.js";
@@ -19,15 +21,22 @@ export async function handleSubmitAddWordForm(e: SubmitEvent) {
   e.preventDefault();
   const form = e.target as HTMLFormElement;
 
+  const formMsg = form.querySelector(".form-message");
+  if (formMsg) formMsg.remove();
+
   if (!form.checkValidity()) {
-    //! сделать вывод сообщений ... под формой
-    console.log(`sotty bro sthm went wrong`);
+    console.log(`sorry bro sthm went wrong`);
+    createFormMessage(form, "Wrong inputs");
+  } else if (checkEmptyInputs(form)) {
+    createFormMessage(form, "Both inputs must be filled");
   } else {
     const data = new FormData(form);
     const wordToSend = JSON.stringify(
       Object.fromEntries(Array.from(data.entries())),
     );
+    createFormMessage(form, "Word is added to DB", "green");
     form.reset();
+
     addWord(wordToSend);
   }
 }
@@ -82,7 +91,7 @@ export function runMainPage(state: GlobalState) {
   const ruWordInput = document.querySelector("#ru_word") as HTMLInputElement;
 
   enWordInput.addEventListener("input", handleEnInputValidation);
-  ruWordInput.addEventListener("input", handleRuInputValidation);
+  ruWordInput.addEventListener("paste", handleRuInputValidation);
 
   window.addEventListener("beforeunload", updateRemoteData);
   gamePageLink.addEventListener("click", handleLinkToPage);
