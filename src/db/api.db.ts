@@ -28,23 +28,25 @@ const searchWord = (word: string): Word | null => {
 
 export const getWords = (): IDBWords => inMemoryDB;
 
-export const addWord = (wordData: Word) => {
-  if (searchWord(wordData.en)) return;
+export const addWord = (wordData: Word): number | undefined => {
+  if (searchWord(wordData.en)) return 409;
   console.log("addWord: added");
   try {
     inMemoryDB[wordData.en] = { en: wordData.en, ru: wordData.ru };
     updateJson();
+    return 201;
   } catch (err: unknown) {
     logError(err);
   }
 };
 
-export const addWords = (wordsData: IDBWords) => {
+export const addWords = (wordsData: IDBWords): number | undefined => {
   try {
     Object.keys(wordsData).forEach((word: string) => {
       addWord(wordsData[word]);
     });
     updateJson();
+    return 201;
   } catch (err: unknown) {
     logError(err);
   }

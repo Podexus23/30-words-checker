@@ -7,6 +7,8 @@ export interface Word {
   ru: string;
 }
 
+export type statusCode = 200 | 201 | 404 | 409;
+
 export type FileExtensions =
   | ".html"
   | ".js"
