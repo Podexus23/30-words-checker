@@ -1,5 +1,57 @@
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+:root {
+  --color: rgb(58, 58, 58);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  background: linear-gradient(rgba(196, 102, 0, 0.6), rgba(155, 89, 182, 0.6));
+}
+
+body {
+  font-family: montserrat, arial, verdana;
+  height: 100%;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+a:visited {
+  color: var(--color);
+}
+
+.invalid {
+  border: 2px solid red;
+  background-color: #ffe6e6;
+}
+
+/* GAME PAGE */
+.game-page {
+  display: flex;
+  gap: 0.7rem;
+  max-width: 80%;
+  flex-direction: column;
+  align-items: center;
+  background: #ffffff;
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+  padding: 0.6rem;
+  text-align: center;
+}
+
 .header {
-  color: rgb(255, 64, 0);
+  color: var(--color);
 }
 
 .img {
@@ -10,11 +62,29 @@
   border: 2px solid rgba(0, 64, 255, 0.003);
 }
 
-.invalid {
-  border: 2px solid red;
-  background-color: #ffe6e6;
+.form_word {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: flex-end;
+  flex-direction: column;
 }
 
-input:invalid {
-  border: 2px solid orange;
+/* MAIN PAGE */
+.main-page {
+  display: flex;
+  gap: 0.7rem;
+  max-width: 80%;
+  flex-direction: column;
+  align-items: center;
+  background: #ffffff;
+  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+  padding: 0.6rem;
+  text-align: center;
+}
+
+.add-word-form_field {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: flex-end;
+  flex-direction: column;
 }
