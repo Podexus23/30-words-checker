@@ -113,12 +113,14 @@ async function handleGamePageClick(e: MouseEvent) {
   }
   if (checkEndGame()) {
     const gameState = getGameState();
-    updateFinalWrapperBlock(gameState);
-
-    const endButton = document.querySelector(
+    let endButton = document.querySelector(
       ".game-btn_end",
     ) as HTMLButtonElement;
-    endButton.addEventListener("click", restartGame);
+    if (!endButton) {
+      updateFinalWrapperBlock(gameState);
+      endButton = document.querySelector(".game-btn_end") as HTMLButtonElement;
+      endButton.addEventListener("click", restartGame);
+    }
   }
 }
 
