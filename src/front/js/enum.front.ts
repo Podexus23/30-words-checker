@@ -10,6 +10,11 @@ export enum SourceType {
   Test = "test",
 }
 
+export enum GameStateType {
+  Game_On = 1,
+  Game_Off = 0,
+}
+
 export interface PageRenderState {
   toMainPageLink: string;
   toGamePageLink: string;

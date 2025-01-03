@@ -1,9 +1,11 @@
+import { GameStateType } from "../enum.front.js";
 import { GameBasicSettings, GameState } from "../interface.front.js";
 
 const gameState: GameState = {
   wordsQuantity: 5,
   playerMoves: 0,
   rightAnswers: 0,
+  onGame: GameStateType.Game_Off,
 };
 
 export function initGameState(

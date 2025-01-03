@@ -41,7 +41,13 @@ function preventFunc(e: Event) {
 
 function restartGame(e: MouseEvent) {
   const button = e.target as HTMLButtonElement;
-  button.removeEventListener("click", restartGame);
+  if (button.classList.contains("game-btn_end")) {
+    button.removeEventListener("click", restartGame);
+  }
+  const gameForms = document.querySelectorAll(".form_word");
+  gameForms.forEach((form) => {
+    form.removeEventListener("submit", preventFunc);
+  });
   removeGameWrapperBlock();
   startGame();
 }
@@ -88,7 +94,11 @@ async function handleGamePageClick(e: MouseEvent) {
   const page = e.target as HTMLElement;
 
   if (page.classList.contains("game-start-btn")) {
-    await startGame();
+    const { onGame } = getGameState();
+    if (!onGame) {
+      await startGame();
+      updateGameState("onGame", 1);
+    } else restartGame(e);
   } else if (page.classList.contains("game_block-btn")) {
     //if there is wrong validation, prevent click to count to the game state
     if (!handleAnswerButtonClick(e)) return;

@@ -17,6 +17,7 @@ export interface GameState {
   wordsQuantity: number;
   playerMoves: number;
   rightAnswers: number;
+  onGame: number;
 }
 
 export type JSONString<T> = string & { __jsonType?: T };
