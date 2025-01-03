@@ -15,6 +15,11 @@ import {
   updateGameWrapperBlock,
   updateStateBlock,
 } from "../view/renderGame.view.js";
+import {
+  createValidationMessage,
+  removeValidationMessage,
+} from "../view/renderMain.view.js";
+import { checkRuWordValidation } from "./helper.controller.js";
 import { renderPage } from "./router.js";
 
 async function startGame() {
@@ -44,12 +49,21 @@ function handleAnswerButtonClick(e: MouseEvent) {
     ".game_block-word",
   ) as HTMLElement;
   const enWordText = enWord.textContent as string;
+
   const wordData = searchWord(enWordText) as Word;
 
   const inputToCheck = wordCheckBlock.querySelector(
     ".game_block-answer",
   ) as HTMLInputElement;
   const value = inputToCheck.value;
+  if (!checkRuWordValidation(value) || value == "") {
+    removeValidationMessage(wordCheckBlock);
+    createValidationMessage(
+      wordCheckBlock,
+      "Input must be filled or use russian letters",
+    );
+    return false;
+  }
 
   if (value === wordData.ru) {
     wordCheckBlock.dataset.answer = "true";
@@ -58,9 +72,11 @@ function handleAnswerButtonClick(e: MouseEvent) {
     wordCheckBlock.dataset.answer = "false";
     wordCheckBlock.style.background = `rgb(100,1,1)`;
   }
+  removeValidationMessage(wordCheckBlock);
   inputToCheck.disabled = true;
   button.disabled = true;
   button.removeEventListener("click", handleAnswerButtonClick);
+  return true;
 }
 
 async function handleGamePageClick(e: MouseEvent) {
@@ -68,9 +84,8 @@ async function handleGamePageClick(e: MouseEvent) {
 
   if (page.classList.contains("game-start-btn")) {
     await startGame();
-  }
-  if (page.classList.contains("game_block-btn")) {
-    handleAnswerButtonClick(e);
+  } else if (page.classList.contains("game_block-btn")) {
+    if (!handleAnswerButtonClick(e)) return;
     const wordBlock = page.closest(".game_block") as HTMLElement;
     if (wordBlock.dataset.answer === "true") {
       updateGameState("rightAnswers", 1);

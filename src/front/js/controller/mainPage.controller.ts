@@ -7,7 +7,8 @@ import {
 } from "../model/wordsData.model.js";
 import {
   addWordToWordsBlock,
-  createFormMessage,
+  createValidationMessage,
+  removeValidationMessage,
   renderMainPage,
 } from "../view/renderMain.view.js";
 import {
@@ -21,20 +22,21 @@ export async function handleSubmitAddWordForm(e: SubmitEvent) {
   e.preventDefault();
   const form = e.target as HTMLFormElement;
 
-  const formMsg = form.querySelector(".form-message");
-  if (formMsg) formMsg.remove();
+  //! move to view
+  const formMsg = form.querySelector(".validation-message") as HTMLElement;
+  if (formMsg) removeValidationMessage(formMsg);
 
   if (!form.checkValidity()) {
-    console.log(`sorry bro sthm went wrong`);
-    createFormMessage(form, "Wrong inputs");
+    console.log(`sorry bro smth went wrong`);
+    createValidationMessage(form, "Wrong inputs");
   } else if (checkEmptyInputs(form)) {
-    createFormMessage(form, "Both inputs must be filled");
+    createValidationMessage(form, "Both inputs must be filled");
   } else {
     const data = new FormData(form);
     const wordToSend = JSON.stringify(
       Object.fromEntries(Array.from(data.entries())),
     );
-    createFormMessage(form, "Word is added to DB", "green");
+    createValidationMessage(form, "Word is added to DB", "green");
     form.reset();
 
     addWord(wordToSend);

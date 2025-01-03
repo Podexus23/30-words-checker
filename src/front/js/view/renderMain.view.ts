@@ -135,16 +135,21 @@ export function renderMainPage(state: PageRenderState) {
   renderFooterBlock(mainPage);
 }
 
-export function createFormMessage(
-  form: HTMLFormElement,
+export function createValidationMessage(
+  elem: HTMLElement,
   msg: string,
   color = "red",
 ) {
   const msgBlock = createTag({
     tagName: "div",
-    className: "form-message",
+    className: "validation-message",
     textContent: msg,
   });
   msgBlock.style.color = color;
-  form.append(msgBlock);
+  elem.append(msgBlock);
+}
+
+export function removeValidationMessage(elem: HTMLElement) {
+  const validationBLock = elem.querySelector(".validation-message");
+  if (validationBLock) validationBLock.remove();
 }
