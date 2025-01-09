@@ -33,6 +33,7 @@ async function startGame() {
   const words = (await getQuantityOfWords(state.wordsQuantity)) as Word[];
 
   //add all words inputs
+  updateGameWrapperBlock(words);
 }
 
 function preventFunc(e: Event) {
