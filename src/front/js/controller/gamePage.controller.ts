@@ -1,4 +1,5 @@
 import { renderState } from "../enum.front.js";
+import { renderGoogleBlock } from "../google/google.drive.js";
 import { GlobalState, Word } from "../interface.front.js";
 import { getQuantityOfWords, searchWord } from "../model/wordsData.model.js";
 import {
@@ -32,7 +33,6 @@ async function startGame() {
   const words = (await getQuantityOfWords(state.wordsQuantity)) as Word[];
 
   //add all words inputs
-  updateGameWrapperBlock(words);
 }
 
 function preventFunc(e: Event) {
@@ -141,6 +141,8 @@ export async function runGamePage(state: GlobalState) {
 
   mainPageLink.addEventListener("click", handleLinkToPage);
   gamePage.addEventListener("click", handleGamePageClick);
+  //! remove
+  gamePage.append(renderGoogleBlock());
 }
 
 //!somehow should remove all listeners on answers if there is open ones(like on change page or smth)
