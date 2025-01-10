@@ -126,24 +126,20 @@ async function createDataJson() {
 
 async function updateDataJson(fileId: string) {
   const xhr = await fetch(
-    `https://www.googleapis.com/drive/v3/files/${fileId}`,
+    `https://www.googleapis.com/upload/drive/v3/files/${fileId}?uploadType=media`,
     {
       method: "PATCH",
       headers: {
         Authorization: "Bearer " + access_token,
-        "Content-type": "application/json",
       },
-      body: JSON.stringify({
-        cat: "mopet",
-        dog: "chebupet",
-      }),
+      body: JSON.stringify({ cat: "motek" }),
     },
   );
   if (xhr.ok) {
     const data = await xhr.json();
-    console.log("File created with ID:", data.id);
+    console.log("File updated with ID:", data.id);
   } else {
-    console.error("Error creating file:", await xhr.text());
+    console.error("Error updating file:", await xhr.json());
   }
 }
 
