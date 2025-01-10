@@ -1,7 +1,8 @@
 //google drive
 
-import { CLIENT_ID, USER_API } from "../keys.js";
+import { CLIENT_ID } from "../keys.js";
 import { createTag } from "../view/createElement.view.js";
+import { getTokenFromCookies } from "./token.google.js";
 
 declare let google: any;
 
@@ -27,8 +28,14 @@ async function loadGoogleApi() {
   });
 }
 
+function saveTokenToCookie(token: string) {
+  console.log(`used`);
+
+  document.cookie = `accessWordsToken=${token}; path=/; max-age=3600;`;
+}
+
 let client: any;
-let access_token: any;
+let access_token: string = getTokenFromCookies() || "";
 let fileId: string;
 
 function initClient() {
@@ -37,8 +44,8 @@ function initClient() {
     scope: "https://www.googleapis.com/auth/drive",
     callback: (tokenResponse: any) => {
       access_token = tokenResponse.access_token;
-      console.log(tokenResponse);
-      return access_token;
+      saveTokenToCookie(access_token);
+      console.log(access_token);
     },
   });
 }
@@ -50,7 +57,6 @@ export const params = new URLSearchParams({
   q: "name='words1.json'",
   fields: "files(id, name)",
   pageSize: "10",
-  key: USER_API,
 });
 
 async function loadData() {
