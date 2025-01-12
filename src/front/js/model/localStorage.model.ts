@@ -1,7 +1,7 @@
-import { LocalAddress } from "../../enum.front.js";
-import { logError } from "../../helpers/log.helper.js";
-import { IDBWords } from "../../interface.front.js";
-import { WORDS } from "../wordsData.model.js";
+import { LocalAddress } from "../enum.front.js";
+import { logError } from "../helpers/log.helper.js";
+import { IDBWords } from "../interface.front.js";
+import { WORDS } from "./wordsData.model.js";
 
 export function getDataFromLocalStorage() {
   const storageData = window.localStorage.getItem(LocalAddress.Src1);

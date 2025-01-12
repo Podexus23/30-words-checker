@@ -26,10 +26,7 @@ let inMemoryWords: IDBWords = {};
 const getRandom = (min: number, max: number): number =>
   Math.floor(Math.random() * (max - min + 1) + min);
 
-export function generateRandomWords(
-  wordsArr: Word[],
-  quantity = 5,
-): Word[] | null {
+function generateRandomWords(wordsArr: Word[], quantity = 5): Word[] | null {
   if (quantity > wordsArr.length) {
     console.error(
       `generateRandomWords: to much to words add, try less than ${wordsArr.length}`,

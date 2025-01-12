@@ -1,5 +1,5 @@
-import { LocalAddress } from "../../enum.front.js";
-import { IDBWords } from "../../interface.front.js";
+import { LocalAddress } from "../enum.front.js";
+import { IDBWords } from "../interface.front.js";
 
 export function getAllDataFromIndexedDB(): Promise<IDBWords> {
   return new Promise((resolve, reject) => {

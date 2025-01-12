@@ -27,19 +27,23 @@ export const renderState = {
     toGamePageLink: "/game",
   },
   local: {
-    toMainPageLink: "../index.html",
-    toGamePageLink: "./pages/game.html",
+    toMainPageLink: "/",
+    toGamePageLink: "/game",
   },
   indexedDB: {
-    toMainPageLink: "../index.html",
-    toGamePageLink: "./pages/game.html",
+    toMainPageLink: "/",
+    toGamePageLink: "/game",
   },
   googleDrive: {
+    toMainPageLink: "/",
+    toGamePageLink: "/game",
+  },
+  testHTML: {
     toMainPageLink: "../index.html",
     toGamePageLink: "./pages/game.html",
   },
   test: {
-    toMainPageLink: "../index.html",
-    toGamePageLink: "./pages/game.html",
+    toMainPageLink: "/",
+    toGamePageLink: "/game",
   },
 } as const;
