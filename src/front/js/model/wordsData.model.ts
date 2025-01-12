@@ -2,6 +2,10 @@ import { globalState } from "../../main.js";
 import { SourceType } from "../enum.front.js";
 import { GlobalState, IDBWords, JSONString, Word } from "../interface.front.js";
 import {
+  getDataFromGoogleDrive,
+  updateGoogleDriveData,
+} from "./googleDrive.model.js";
+import {
   getAllDataFromIndexedDB,
   updateIndexedDBData,
 } from "./indexedDB.model.js";
@@ -59,9 +63,8 @@ export async function initInMemory(state: GlobalState) {
       break;
     }
     case SourceType.GoogleDrive: {
-      inMemoryWords = WORDS;
-      //?add get function
-      console.warn(`still not ready`);
+      inMemoryWords = await getDataFromGoogleDrive();
+
       break;
     }
     default: {
@@ -125,8 +128,8 @@ export async function updateRemoteData() {
       break;
     }
     case SourceType.GoogleDrive: {
-      console.warn("update Google Drive function is not ready");
-      //?add send function
+      const data = inMemoryWords;
+      await updateGoogleDriveData(data);
       break;
     }
   }
