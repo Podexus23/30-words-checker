@@ -1,9 +1,13 @@
 import { globalState } from "../../main.js";
 import { LocalAddress, SourceType } from "../enum.front.js";
-import { logError } from "../helpers/log.helper.js";
 import { GlobalState, IDBWords, JSONString, Word } from "../interface.front.js";
+import {
+  getDataFromLocalStorage,
+  updateLocalData,
+} from "./localStorage/localStorage.model.js";
 
-const WORDS: IDBWords = {
+//! remove export from WORDS
+export const WORDS: IDBWords = {
   cat: { en: "cat", ru: "кот" },
   dog: { en: "dog", ru: "собака" },
   ship: { en: "ship", ru: "корабль" },
@@ -100,26 +104,6 @@ async function getDataFromServer(): Promise<IDBWords> {
 async function updateServerData(data: JSONString<IDBWords>) {
   await fetch("/api/words", { method: "POST", body: data });
 }
-
-//localStorage DATA
-export function getDataFromLocalStorage() {
-  const storageData = window.localStorage.getItem(LocalAddress.Src1);
-
-  if (!storageData) return WORDS;
-
-  const data = JSON.parse(storageData);
-  if (Object.keys(data).length === 0) return WORDS;
-
-  return data;
-}
-
-export const updateLocalData = async (data: IDBWords) => {
-  try {
-    window.localStorage.setItem(LocalAddress.Src1, JSON.stringify(data));
-  } catch (err) {
-    logError(err);
-  }
-};
 
 //indexedDB Data
 async function getAllDataFromIndexedDB(): Promise<IDBWords> {
