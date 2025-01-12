@@ -1,10 +1,14 @@
 import { globalState } from "../../main.js";
-import { LocalAddress, SourceType } from "../enum.front.js";
+import { SourceType } from "../enum.front.js";
 import { GlobalState, IDBWords, JSONString, Word } from "../interface.front.js";
+import {
+  getAllDataFromIndexedDB,
+  updateIndexedDBData,
+} from "./indexedDB.model.js";
 import {
   getDataFromLocalStorage,
   updateLocalData,
-} from "./localStorage/localStorage.model.js";
+} from "./localStorage.model.js";
 
 //! remove export from WORDS
 export const WORDS: IDBWords = {
@@ -59,8 +63,8 @@ export async function initInMemory(state: GlobalState) {
     }
     case SourceType.GoogleDrive: {
       inMemoryWords = WORDS;
+      //?add get function
       console.warn(`still not ready`);
-
       break;
     }
     default: {
@@ -105,69 +109,6 @@ async function updateServerData(data: JSONString<IDBWords>) {
   await fetch("/api/words", { method: "POST", body: data });
 }
 
-//indexedDB Data
-async function getAllDataFromIndexedDB(): Promise<IDBWords> {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open(LocalAddress.Src1, 1);
-
-    request.onsuccess = (e) => {
-      const request = e.target as IDBRequest<IDBDatabase>;
-      const db = request.result;
-      const transaction = db.transaction("words", "readonly");
-      const store = transaction.objectStore("words");
-
-      const allWords = store.getAll();
-
-      allWords.onsuccess = () => {
-        const res: IDBWords = allWords.result.reduce((acc, cur) => {
-          const { name, en, ru } = cur;
-          acc[name] = { en, ru };
-          return acc;
-        }, {});
-        resolve(res);
-      };
-      allWords.onerror = (event) => {
-        const getRequest = event.target as IDBRequest;
-        reject(getRequest.error);
-      };
-    };
-
-    request.onerror = (event) => {
-      const getRequest = event.target as IDBRequest;
-      reject(getRequest.error);
-    };
-  });
-}
-
-async function updateIndexedDBData(data: IDBWords) {
-  const request = indexedDB.open(LocalAddress.Src1, 1);
-
-  request.onsuccess = (e) => {
-    const request = e.target as IDBRequest<IDBDatabase>;
-    const db = request.result;
-
-    Object.keys(data).forEach((word) => {
-      const transaction = db.transaction("words", "readwrite");
-      const store = transaction.objectStore("words");
-      const dbData = { name: word, en: data[word].en, ru: data[word].ru };
-      const addWord = store.add(dbData);
-
-      addWord.onsuccess = () => {
-        console.log(`Word: ${word} added`);
-      };
-      addWord.onerror = (event) => {
-        const getRequest = event.target as IDBRequest;
-        console.error(getRequest.error);
-      };
-    });
-  };
-
-  request.onerror = (event) => {
-    const getRequest = event.target as IDBRequest;
-    console.error(getRequest.error);
-  };
-}
-
 export async function updateRemoteData() {
   const state = globalState;
   switch (state.source) {
@@ -184,6 +125,11 @@ export async function updateRemoteData() {
     case SourceType.IndexedDB: {
       const data = inMemoryWords;
       updateIndexedDBData(data);
+      break;
+    }
+    case SourceType.GoogleDrive: {
+      console.warn("update Google Drive function is not ready");
+      //?add send function
       break;
     }
   }
