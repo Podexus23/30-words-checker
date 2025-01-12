@@ -8,6 +8,7 @@ export enum SourceType {
   IndexedDB = "indexedDB",
   Server = "server",
   Test = "test",
+  GoogleDrive = "googleDrive",
 }
 
 export enum GameStateType {
@@ -30,6 +31,10 @@ export const renderState = {
     toGamePageLink: "./pages/game.html",
   },
   indexedDB: {
+    toMainPageLink: "../index.html",
+    toGamePageLink: "./pages/game.html",
+  },
+  googleDrive: {
     toMainPageLink: "../index.html",
     toGamePageLink: "./pages/game.html",
   },

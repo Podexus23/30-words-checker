@@ -7,12 +7,11 @@ export function saveTokenToCookie(token: string) {
 }
 
 export function getTokenFromCookies() {
-  return (
-    document.cookie
-      .split(";")
-      .filter((e) => e.includes("accessWordsToken"))[0]
-      .split("=")[1] || ""
-  );
+  const cookie = document.cookie
+    .split(";")
+    .filter((e) => e.includes("accessWordsToken"));
+  if (cookie[0]) return cookie[0].split("=")[1];
+  else return "";
 }
 //проверять на работу, валидировать, закидывать в использование
 //иначе реактивить новый

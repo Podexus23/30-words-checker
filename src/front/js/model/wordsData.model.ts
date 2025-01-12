@@ -9,6 +9,7 @@ const WORDS: IDBWords = {
   ship: { en: "ship", ru: "корабль" },
   sheep: { en: "sheep", ru: "овца" },
   cup: { en: "cup", ru: "чашка" },
+  words: { en: "words", ru: "слова" },
 };
 
 let inMemoryWords: IDBWords = {};
@@ -50,6 +51,12 @@ export async function initInMemory(state: GlobalState) {
     }
     case SourceType.IndexedDB: {
       inMemoryWords = await getAllDataFromIndexedDB();
+      break;
+    }
+    case SourceType.GoogleDrive: {
+      inMemoryWords = WORDS;
+      console.warn(`still not ready`);
+
       break;
     }
     default: {
