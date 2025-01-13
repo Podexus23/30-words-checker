@@ -64,7 +64,6 @@ export async function initInMemory(state: GlobalState) {
     }
     case SourceType.GoogleDrive: {
       inMemoryWords = await getDataFromGoogleDrive();
-
       break;
     }
     default: {

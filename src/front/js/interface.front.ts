@@ -2,6 +2,7 @@ import { SourceType } from "./enum.front.js";
 
 export interface GlobalState {
   source: SourceType;
+  allSources: SourceType[];
 }
 
 export interface IDBWords {

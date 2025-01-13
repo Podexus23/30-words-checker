@@ -12,6 +12,7 @@ import {
   removeValidationMessage,
   renderMainPage,
 } from "../view/renderMain.view.js";
+import { addAsideSettingsBlock } from "./asideSettings.controller.js";
 import {
   checkEmptyInputs,
   checkEnWordValidation,
@@ -86,6 +87,8 @@ function handleRuInputValidation(e: Event) {
 export function runMainPage(state: GlobalState) {
   //render main page and add all listeners
   renderMainPage(renderState[state.source]);
+  if (!document.querySelector(".aside-settings")) addAsideSettingsBlock(state);
+
   const addWordForm = document.querySelector(
     ".add-word-form",
   ) as HTMLFormElement;

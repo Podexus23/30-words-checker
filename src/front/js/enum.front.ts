@@ -9,6 +9,7 @@ export enum SourceType {
   Server = "server",
   Test = "test",
   GoogleDrive = "googleDrive",
+  Default = "default",
 }
 
 export enum GameStateType {
@@ -41,6 +42,10 @@ export const renderState = {
   testHTML: {
     toMainPageLink: "../index.html",
     toGamePageLink: "./pages/game.html",
+  },
+  default: {
+    toMainPageLink: "/",
+    toGamePageLink: "/game",
   },
   test: {
     toMainPageLink: "/",
