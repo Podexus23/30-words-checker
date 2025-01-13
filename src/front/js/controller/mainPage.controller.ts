@@ -86,7 +86,7 @@ function handleRuInputValidation(e: Event) {
 
 export function runMainPage(state: GlobalState) {
   //render main page and add all listeners
-  renderMainPage(renderState[state.source]);
+  renderMainPage(renderState);
   if (!document.querySelector(".aside-settings")) addAsideSettingsBlock(state);
 
   const addWordForm = document.querySelector(

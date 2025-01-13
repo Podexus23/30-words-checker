@@ -22,33 +22,7 @@ export interface PageRenderState {
   toGamePageLink: string;
 }
 
-export const renderState = {
-  server: {
-    toMainPageLink: "/",
-    toGamePageLink: "/game",
-  },
-  local: {
-    toMainPageLink: "/",
-    toGamePageLink: "/game",
-  },
-  indexedDB: {
-    toMainPageLink: "/",
-    toGamePageLink: "/game",
-  },
-  googleDrive: {
-    toMainPageLink: "/",
-    toGamePageLink: "/game",
-  },
-  testHTML: {
-    toMainPageLink: "../index.html",
-    toGamePageLink: "./pages/game.html",
-  },
-  default: {
-    toMainPageLink: "/",
-    toGamePageLink: "/game",
-  },
-  test: {
-    toMainPageLink: "/",
-    toGamePageLink: "/game",
-  },
-} as const;
+export const renderState: PageRenderState = {
+  toMainPageLink: "/",
+  toGamePageLink: "/game",
+};

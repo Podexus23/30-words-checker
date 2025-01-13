@@ -1,5 +1,5 @@
 import { renderState } from "../enum.front.js";
-import { GlobalState, Word } from "../interface.front.js";
+import { Word } from "../interface.front.js";
 import { getQuantityOfWords, searchWord } from "../model/wordsData.model.js";
 import {
   checkEndGame,
@@ -132,8 +132,8 @@ function handleLinkToPage(e: MouseEvent) {
   renderPage(path);
 }
 
-export async function runGamePage(state: GlobalState) {
-  renderGamePage(renderState[state.source]);
+export async function runGamePage() {
+  renderGamePage(renderState);
   const gamePage = document.querySelector(".game-page") as HTMLElement;
   const mainPageLink = document.querySelector(
     ".main-link",

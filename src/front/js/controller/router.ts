@@ -11,10 +11,10 @@ const routes: Record<string, RouteHandler> = {
     if (gamePage) removeGamePage();
     runMainPage(state);
   },
-  "/game": (state: GlobalState) => {
+  "/game": () => {
     const mainPage = document.querySelector(".main-page");
     if (mainPage) removeMainPage();
-    runGamePage(state);
+    runGamePage();
   },
   "/404": () => {
     const root = document.getElementById("root") as HTMLElement;
