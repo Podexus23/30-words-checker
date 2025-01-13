@@ -12,7 +12,7 @@ const PORT = 3000;
 const server = http.createServer(async (req, res) => {
   try {
     // GET METHOD
-    console.log(`${req.url}`);
+    // console.log(`${req.url}`);
 
     if (req.method === "GET" && req.url) {
       const parsedUrl = parse(req.url, true);

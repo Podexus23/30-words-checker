@@ -4,7 +4,7 @@ import { GlobalState } from "./js/interface.front.js";
 import { initInMemory } from "./js/model/wordsData.model.js";
 
 export const globalState: GlobalState = {
-  source: SourceType.Server,
+  source: SourceType.GoogleDrive,
 };
 
 const urlPath = window.location.pathname;

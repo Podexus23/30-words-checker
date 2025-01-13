@@ -8,6 +8,7 @@ export enum SourceType {
   IndexedDB = "indexedDB",
   Server = "server",
   Test = "test",
+  GoogleDrive = "googleDrive",
 }
 
 export enum GameStateType {
@@ -26,15 +27,23 @@ export const renderState = {
     toGamePageLink: "/game",
   },
   local: {
-    toMainPageLink: "../index.html",
-    toGamePageLink: "./pages/game.html",
+    toMainPageLink: "/",
+    toGamePageLink: "/game",
   },
   indexedDB: {
+    toMainPageLink: "/",
+    toGamePageLink: "/game",
+  },
+  googleDrive: {
+    toMainPageLink: "/",
+    toGamePageLink: "/game",
+  },
+  testHTML: {
     toMainPageLink: "../index.html",
     toGamePageLink: "./pages/game.html",
   },
   test: {
-    toMainPageLink: "../index.html",
-    toGamePageLink: "./pages/game.html",
+    toMainPageLink: "/",
+    toGamePageLink: "/game",
   },
 } as const;
