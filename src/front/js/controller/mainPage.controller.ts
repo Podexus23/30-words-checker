@@ -1,4 +1,4 @@
-import { renderState } from "../enum.front.js";
+import { renderState, SourceType } from "../enum.front.js";
 import { GlobalState } from "../interface.front.js";
 import {
   addWord,
@@ -41,6 +41,10 @@ export async function handleSubmitAddWordForm(e: SubmitEvent) {
     form.reset();
 
     addWord(wordToSend);
+    //! workaround but ok
+    if (SourceType.GoogleDrive) {
+      updateRemoteData();
+    }
   }
 }
 

@@ -14,3 +14,5 @@ await initInMemory(globalState);
 
 // router/render state
 renderPage(urlPath);
+
+//third party scripts
