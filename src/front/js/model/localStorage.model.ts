@@ -1,15 +1,21 @@
 import { LocalStorageAddress, SourceType } from "../enum.front.js";
-import { logError } from "../helpers/log.helper.js";
+import { logError, logWarn } from "../helpers/log.helper.js";
 import { GlobalState, IDBWords } from "../interface.front.js";
-import { WORDS } from "./wordsData.model.js";
 
-export function getDataFromLocalStorage() {
+export function getDataFromLocalStorage(): IDBWords | number {
   const storageData = window.localStorage.getItem(LocalStorageAddress.Words);
 
-  if (!storageData) return WORDS;
+  if (!storageData) {
+    logWarn("No saved words in local storage");
+    return 404;
+  }
 
   const data = JSON.parse(storageData);
-  if (Object.keys(data).length === 0) return WORDS;
+
+  if (Object.keys(data).length === 0) {
+    logError("Broken data from localStorage");
+    return 422;
+  }
 
   return data;
 }
@@ -32,7 +38,7 @@ export function getGlobalStateFromLocalStorage() {
   const storageData = window.localStorage.getItem(LocalStorageAddress.State);
 
   if (!storageData) {
-    logError("No saved globalState in local storage");
+    logWarn("No saved globalState in local storage");
     return;
   }
   const sourceKeys = Object.values(SourceType).filter((v) => isNaN(Number(v)));

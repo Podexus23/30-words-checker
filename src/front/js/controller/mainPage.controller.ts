@@ -104,7 +104,9 @@ export function runMainPage(state: GlobalState) {
   enWordInput.addEventListener("input", handleEnInputValidation);
   ruWordInput.addEventListener("paste", handleRuInputValidation);
 
-  window.addEventListener("beforeunload", updateRemoteData);
+  window.addEventListener("beforeunload", () => {
+    updateRemoteData();
+  });
   gamePageLink.addEventListener("click", handleLinkToPage);
   addWordForm.addEventListener("submit", handleSubmitAddWordForm);
   getWordsBtn.addEventListener("click", handleGetWordsButton);

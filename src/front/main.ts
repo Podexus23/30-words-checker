@@ -18,17 +18,16 @@ export const globalState: GlobalState = {
     SourceType.Test,
   ],
 };
+
 const localSource = await getGlobalStateFromLocalStorage();
 if (localSource) globalState.source = localSource.source;
-const urlPath = window.location.pathname;
 
 // all words state
 await initInMemory(globalState);
 
 // router/render state
+const urlPath = window.location.pathname;
 renderPage(urlPath);
-
-//third party scripts
 
 window.addEventListener("beforeunload", () => {
   updateGlobalStateLocalData(globalState);

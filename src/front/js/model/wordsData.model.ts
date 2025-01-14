@@ -1,5 +1,6 @@
 import { globalState } from "../../main.js";
 import { SourceType } from "../enum.front.js";
+import { logError } from "../helpers/log.helper.js";
 import { GlobalState, IDBWords, JSONString, Word } from "../interface.front.js";
 import {
   getDataFromGoogleDrive,
@@ -55,11 +56,20 @@ export async function initInMemory(state: GlobalState) {
       break;
     }
     case SourceType.Local: {
-      inMemoryWords = getDataFromLocalStorage();
+      const data = getDataFromLocalStorage();
+      inMemoryWords = typeof data === "number" ? WORDS : data;
       break;
     }
     case SourceType.IndexedDB: {
-      inMemoryWords = await getAllDataFromIndexedDB();
+      try {
+        const data = await getAllDataFromIndexedDB();
+        if (!data) updateIndexedDBData(WORDS);
+        inMemoryWords = data || WORDS;
+      } catch (error: unknown) {
+        logError(error);
+        updateIndexedDBData(WORDS);
+        inMemoryWords = WORDS;
+      }
       break;
     }
     case SourceType.GoogleDrive: {
