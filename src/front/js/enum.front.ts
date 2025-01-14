@@ -1,6 +1,7 @@
-export enum LocalAddress {
-  Src1 = "WC_words",
-  Src2 = "WC_2024",
+export enum LocalStorageAddress {
+  Words = "WC_words",
+  Words_copy = "WC_2024",
+  State = "WC_GS",
 }
 
 export enum SourceType {

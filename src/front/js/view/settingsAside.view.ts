@@ -26,8 +26,27 @@ export function renderSettingsAside(
     tagName: "div",
     className: "aside-settings_source",
   });
+
   const buttons = renderSources(state.allSources);
+  //change color of the active button
+  buttons.forEach((button) => {
+    if (button.dataset.sourceName === state.source) selectButtonActive(button);
+  });
+
   mainBlock.append(asideBlock);
   asideBlock.append(sourceButtons);
   sourceButtons.append(...buttons);
+}
+
+export function resetButtonsColor(parentBlock: HTMLElement) {
+  const buttons = parentBlock.querySelectorAll(
+    ".btn",
+  ) as NodeListOf<HTMLElement>;
+  buttons.forEach((button: HTMLElement) => {
+    button.classList.remove("active");
+  });
+}
+
+export function selectButtonActive(button: HTMLElement) {
+  button.classList.add("active");
 }

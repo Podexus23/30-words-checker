@@ -1,9 +1,9 @@
-import { LocalAddress } from "../enum.front.js";
+import { LocalStorageAddress } from "../enum.front.js";
 import { IDBWords } from "../interface.front.js";
 
 export function getAllDataFromIndexedDB(): Promise<IDBWords> {
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(LocalAddress.Src1, 1);
+    const request = indexedDB.open(LocalStorageAddress.Words, 1);
 
     request.onsuccess = (e) => {
       const request = e.target as IDBRequest<IDBDatabase>;
@@ -35,7 +35,7 @@ export function getAllDataFromIndexedDB(): Promise<IDBWords> {
 }
 
 export function updateIndexedDBData(data: IDBWords) {
-  const request = indexedDB.open(LocalAddress.Src1, 1);
+  const request = indexedDB.open(LocalStorageAddress.Words, 1);
 
   request.onsuccess = (e) => {
     const request = e.target as IDBRequest<IDBDatabase>;
